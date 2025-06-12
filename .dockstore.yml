@@ -1,0 +1,3 @@
+workflows:
+  - subclass: WDL 
+    primaryDescriptorPath: colocboost.wdl
