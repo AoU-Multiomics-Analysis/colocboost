@@ -1,11 +1,13 @@
 version 1.0
 
 task split_vcf {
-    File VCF
-    File VCF_index
-    File proteome_bed
-    Int padding
-    Int disk_space
+    input {
+        File VCF
+        File VCF_index
+        File proteome_bed
+        Int padding
+        Int disk_space
+    }
     
     parameter_meta {
         VCF: {
