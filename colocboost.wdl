@@ -7,15 +7,18 @@ task colocboost {
     File proteome_covars 
     String phenotype_id
     
+    Int memory 
+    Int disk_space 
+    Int num_threads
+
     command{
     Rscript run_colocboost.R \
-        --vcf \
-        --transcriptome_bed \
-        --proteome_bed \
-        --transcriptome_covars \
-        --proteome_covars \
-        --phenotype_id \
-        --output 
+        --vcf ${VCF} \
+        --transcriptome_bed ${transcriptome_bed} \
+        --proteome_bed ${proteome_bed} \
+        --transcriptome_covars ${transcriptome_covars} \
+        --proteome_covars ${proteome_covars} \
+        --phenotype_id ${phenotype_id} 
     }
     runtime {
     docker: ""
@@ -23,7 +26,6 @@ task colocboost {
     disks: "local-disk ${disk_space} HDD"
     bootDiskSizeGb: 25
     cpu: "${num_threads}"
-    preemptible: "${num_preempt}"
     }
     
     output {

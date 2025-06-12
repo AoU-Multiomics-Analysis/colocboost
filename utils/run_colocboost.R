@@ -18,9 +18,6 @@ parser$add_argument("-proteome_covars", "--proteome_covars", dest="filename", re
     help="Path to gwas file")
 parser$add_argument("-phenotype_id", "--phenotype_id", dest="filename", required=TRUE,
     help="phenotype_id_string")
-parser$add_argument("-output", "--output", dest="filename", required=TRUE,
-    help="phenotype_id_string")
-
 
 
 args <- parser$parse_args()
@@ -39,7 +36,7 @@ proteome_covars_path <- basename(args$proteome_covars)
 phenotype_id <- args$phenotype_id
 VCF_file_path <- basename(args$vcf)
 
-outfile <- args$outfile
+outfile <- paste0(phenotype_id,'_colocboost_res.RDS') 
 ########### LOAD FILES #########
 # load individual level data 
 proteome_bed_df <- fread(proteome_bed_path)
