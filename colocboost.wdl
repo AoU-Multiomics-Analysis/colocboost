@@ -24,7 +24,6 @@ task colocboost {
     bcftools view "$VCF_URL" -r chr1:1000171-chr1:1000172
 
     Rscript run_colocboost.R \
-    #    --vcf ${VCF} \
         --transcriptome_bed ${transcriptome_bed} \
         --proteome_bed ${proteome_bed}  \
         --transcriptome_covars ${transcriptome_covars}  \
