@@ -5,6 +5,7 @@ library(argparse)
 source('colocboost_utils.R')
 
 ###### PARSE COMMAND LINE  ARGUMENTS ######
+parser <- ArgumentParser()
 
 parser$add_argument("-vcf", "--vcf", dest="filename", required=TRUE,
     help="Path to VCF file")
