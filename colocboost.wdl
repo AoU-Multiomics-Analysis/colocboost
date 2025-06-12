@@ -1,5 +1,7 @@
 version 1.0
 
+task decompress
+
 task split_vcf {
     input {
         File VCF
@@ -21,23 +23,25 @@ task split_vcf {
     }
 
     command {
-        zcat "${proteome_bed}" | while IFS=$'\t' read -r chr start end name; do
+        gzip -c "${proteome_bed}" > proteome.bed
+        
+        while IFS=$'\t' read -r chr start end name; do
             new_start=$((start - padding))
             new_end=$((end + padding))
             if (( new_start < 1 )); then new_start=1; fi
-        
+
             region="$chr:$new_start-$new_end"
             out_vcf="$name.vcf.gz"
-        
+
             echo $new_start
             echo $new_end
             echo $region
             echo $out_vcf
-        
+
             # Extract the region from the VCF using tabix
             tabix --threads 1 "${VCF}" $region > $out_vcf
             tabix -p vcf $out_vcf  # Index the output VCF
-        done
+        done < proteome.bed
     }
 
     runtime {
