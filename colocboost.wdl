@@ -1,6 +1,6 @@
 task split_vcf {
-    File VCF
-    File VCF_index
+    String VCF
+    String VCF_index
     File proteome_bed
     Int padding
     Int disk_space
