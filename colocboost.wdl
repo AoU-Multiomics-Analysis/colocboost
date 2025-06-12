@@ -4,6 +4,15 @@ task split_vcf {
     File proteome_bed
     Int padding
     Int disk_space
+    
+    parameter_meta {
+        VCF: {
+          localization_optional: true
+        }
+        VCF_index: {
+          localization_optional: true
+        }
+    }
 
     command {
         # Read the BED file and process each line
