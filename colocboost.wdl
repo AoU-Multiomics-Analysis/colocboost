@@ -3,6 +3,7 @@ task split_vcf {
     File VCF_index
     File proteome_bed
     Int padding
+    Int disk_space
 
     command {
         # Read the BED file and process each line
@@ -25,6 +26,7 @@ task split_vcf {
         docker: "quay.io/biocontainers/tabix:0.2.5--0"  # Example Docker image for tabix
         cpu: 1  # Default CPU allocation
         memory: "4 GB"  # Default memory allocation
+        disks: "local-disk ${disk_space} HDD"
     }
 
     output {
