@@ -13,7 +13,7 @@ task colocboost {
     Int num_threads
 
     command{
-    Rscript run_colocboost.R \
+    Rscript /opt/run_colocboost.R \
         --vcf ${VCF} \
         --transcriptome_bed ${transcriptome_bed} \
         --proteome_bed ${proteome_bed}  \
