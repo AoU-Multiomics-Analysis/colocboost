@@ -58,9 +58,9 @@ task split_vcf {
     command {
         echo ${proteome_bed}
 
-        bgzip -d -o proteome.bed "${proteome_bed}"
+        bgzip -d --output proteome.bed "${proteome_bed}"
 
-        zcat ${proteome_bed} | head
+        zcat ${proteome_bed} > zcat_proteome.bed
         
         head proteome.bed
         
@@ -80,7 +80,7 @@ task split_vcf {
             # Extract the region from the VCF using tabix
             tabix --threads 1 "${VCF}" $region > $out_vcf
             tabix -p vcf $out_vcf  # Index the output VCF
-        done < proteome.bed
+        done < zcat_proteome.bed
     }
 
     runtime {
