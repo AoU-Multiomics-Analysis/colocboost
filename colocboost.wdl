@@ -143,6 +143,7 @@ task colocboost {
 
 
 workflow colocboost_wdl {
+    call stream_vcf
     call split_vcf
     call colocboost
 }
