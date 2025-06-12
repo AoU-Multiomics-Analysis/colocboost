@@ -16,5 +16,5 @@ RUN micromamba -y -n base install  \
 
 #RUN apt-get install -y wget
 
-RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/colocboost_utils.R -o /opt/colocboost_utils.R
-RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/run_colocboost.R -o /opt/run_colocboost.R
+RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/colocboost_utils.R -o ./colocboost_utils.R
+RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/run_colocboost.R -o ./run_colocboost.R
