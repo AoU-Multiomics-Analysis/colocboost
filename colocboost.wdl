@@ -59,6 +59,10 @@ task split_vcf {
 
     command {
         gzip -c "${proteome_bed}" > proteome.bed
+
+        zcat ${proteome_bed} | head
+        
+        head proteome.bed
         
         while IFS=$'\t' read -r chr start end name; do
             new_start=$((start - padding))
