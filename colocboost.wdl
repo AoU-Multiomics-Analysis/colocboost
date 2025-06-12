@@ -18,7 +18,8 @@ task colocboost {
     ls /src
     echo "workdir"
     ls .
-    Rscript /src/run_colocboost.R \
+    cp /src/* .
+    Rscript run_colocboost.R \
         --transcriptome_bed ${transcriptome_bed} \
         --proteome_bed ${proteome_bed}  \
         --transcriptome_covars ${transcriptome_covars}  \
