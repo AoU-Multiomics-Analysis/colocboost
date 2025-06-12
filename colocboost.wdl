@@ -8,13 +8,22 @@ task colocboost {
     String phenotype_id
     
     command{
-
-
-
+    Rscript run_colocboost.R \
+        --vcf \
+        --transcriptome_bed \
+        --proteome_bed \
+        --transcriptome_covars \
+        --proteome_covars \
+        --phenotype_id \
+        --output 
     }
     runtime {
-
-
+    docker: ""
+    memory: "${memory}GB"
+    disks: "local-disk ${disk_space} HDD"
+    bootDiskSizeGb: 25
+    cpu: "${num_threads}"
+    preemptible: "${num_preempt}"
     }
     
     output {
