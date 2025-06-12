@@ -39,6 +39,6 @@ task colocboost {
 }
 
 
-workflow colocboost {
+workflow colocboost_wdl {
     call colocboost
 }
