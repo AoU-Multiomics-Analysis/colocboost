@@ -58,6 +58,8 @@ task split_vcf {
     }
 
     command {
+        echo ${proteome_bed}"
+
         gzip -c "${proteome_bed}" > proteome.bed
 
         zcat ${proteome_bed} | head
