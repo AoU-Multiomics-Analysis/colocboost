@@ -81,6 +81,6 @@ task colocboost {
 
 
 workflow colocboost_wdl {
-    call splitvcf
+    call split_vcf
     call colocboost
 }
