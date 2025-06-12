@@ -9,3 +9,7 @@ micromamba -y -n base install  \
     conda-forge::r-data.table \
     bioconda::r-bedr \
     bioconda::bedtools
+
+
+RUN wget https://github.com/evin-padhi/colocboost_WDL/blob/main/utils/colocboost_utils.R
+RUN wget https://github.com/evin-padhi/colocboost_WDL/blob/main/utils/run_colocboost.R
