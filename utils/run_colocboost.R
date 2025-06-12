@@ -23,6 +23,8 @@ parser$add_argument("-phenotype_id", "--phenotype_id", dest="filename", required
 
 args <- parser$parse_args()
 
+
+
 ###### SET PATHS ######## 
 
 # load path to bed files
@@ -36,6 +38,9 @@ proteome_covars_path <- basename(args$proteome_covars)
 
 phenotype_id <- args$phenotype_id
 VCF_file_path <- basename(args$vcf)
+
+# use if VCF name is specifying what phenotpye to run on 
+#phenotype_id <- unlist(str_split(VCF_file_path,'\\.'))[1]
 
 outfile <- paste0(phenotype_id,'_colocboost_res.RDS') 
 ########### LOAD FILES #########
