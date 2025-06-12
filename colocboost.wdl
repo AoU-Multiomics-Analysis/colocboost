@@ -1,3 +1,36 @@
+task split_vcf{
+    input{
+    
+    File VCF 
+    File VCF_index 
+    File proteome_bed 
+    Int padding
+
+    }
+    command{
+    
+    
+    while IFS=$'\t' read -r chr start end name; do
+        new_start=$((start - PADDING))
+        new_end=$((end + PADDING))
+        if (( new_start < 1 )); then new_start=1; fi
+
+        region="${chr}:${new_start}-${new_end}"
+        out_vcf="${name}.vcf.gz"
+        
+        tabix  --threads "${cpu}"  "$region" "$VCF" >  "$out_vcf"
+        tabix index "$out_vcf"
+    done < "$BED"
+    }
+    runtime{
+    }
+    output{
+
+    }
+
+}
+
+
 task colocboost {
 
     File VCF
