@@ -35,8 +35,6 @@ task stream_vcf {
     }
 }
 
-
-
 task split_vcf {
     input {
         File VCF
@@ -60,7 +58,7 @@ task split_vcf {
     command {
         echo ${proteome_bed}"
 
-        gzip -c "${proteome_bed}" > proteome.bed
+        bgzip -c "${proteome_bed}" > proteome.bed
 
         zcat ${proteome_bed} | head
         
