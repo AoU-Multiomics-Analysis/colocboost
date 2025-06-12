@@ -1,5 +1,42 @@
 version 1.0
 
+task stream_vcf {
+    input {
+        File VCF
+        File VCF_index
+        Int disk_space
+    }
+    
+    parameter_meta {
+        VCF: {
+          description: "Cloud VCF file",
+          localization_optional: true
+        }
+        VCF_index: {
+          description: "Cloud VCF index",
+          localization_optional: true
+        }
+    }
+
+    command {
+        bcftools view ${VCF} -r chr1:1000171-1000172
+    }
+
+    runtime {
+        # Specify the resources required for the task
+        docker: "quay.io/biocontainers/bcftools:1.22--h3a4d415_0"  # Example Docker image for tabix
+        cpu: 1  # Default CPU allocation
+        memory: "4 GB"  # Default memory allocation
+        disks: "local-disk ${disk_space} HDD"
+    }
+
+    output {
+        Array[File] out_vcfs = glob("*.vcf.gz")  # Collect all output VCF files
+    }
+}
+
+
+
 task split_vcf {
     input {
         File VCF
