@@ -55,16 +55,18 @@ task colocboost {
 
     #File VCF
     #File VCF_index
-    File transcriptome_bed 
-    File proteome_bed
-    File transcriptome_covars 
-    File proteome_covars
-    String phenotype_id
-
-    String docker_image
-    Int memory 
-    Int disk_space 
-    Int num_threads
+    input {
+        File transcriptome_bed 
+        File proteome_bed
+        File transcriptome_covars 
+        File proteome_covars
+        String phenotype_id
+    
+        String docker_image
+        Int memory 
+        Int disk_space 
+        Int num_threads
+    }
 
     command{
     echo "/src"
