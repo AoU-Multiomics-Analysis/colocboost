@@ -21,24 +21,23 @@ task split_vcf {
     }
 
     command {
-        # Read the BED file and process each line
-        while IFS=$'\t' read -r chr start end name; do
+        zcat "${proteome_bed}" | while IFS=$'\t' read -r chr start end name; do
             new_start=$((start - padding))
             new_end=$((end + padding))
             if (( new_start < 1 )); then new_start=1; fi
-
+        
             region="$chr:$new_start-$new_end"
             out_vcf="$name.vcf.gz"
-
+        
             echo $new_start
             echo $new_end
             echo $region
             echo $out_vcf
-
+        
             # Extract the region from the VCF using tabix
             tabix --threads 1 "${VCF}" $region > $out_vcf
             tabix -p vcf $out_vcf  # Index the output VCF
-        done < "${proteome_bed}"
+        done
     }
 
     runtime {
