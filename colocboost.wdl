@@ -1,7 +1,5 @@
 version 1.0
 
-task decompress
-
 task split_vcf {
     input {
         File VCF
