@@ -85,7 +85,8 @@ task split_vcf {
 
     runtime {
         # Specify the resources required for the task
-        docker: "quay.io/biocontainers/tabix:0.2.5--0"  # Example Docker image for tabix
+        #docker: "quay.io/biocontainers/tabix:0.2.5--0"  # Example Docker image for tabix
+        docker: "epadhi/bcftools_bgzip:latest"
         cpu: 1  # Default CPU allocation
         memory: "4 GB"  # Default memory allocation
         disks: "local-disk ${disk_space} HDD"
