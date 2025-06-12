@@ -1,10 +1,8 @@
 task split_vcf {
-    input {
-        File VCF
-        File VCF_index
-        File proteome_bed
-        Int padding
-    }
+    File VCF
+    File VCF_index
+    File proteome_bed
+    Int padding
 
     command {
         # Read the BED file and process each line
