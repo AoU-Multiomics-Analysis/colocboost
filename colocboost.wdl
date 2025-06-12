@@ -1,3 +1,41 @@
+task split_vcf {
+    input {
+        File VCF
+        File VCF_index
+        File proteome_bed
+        Int padding
+    }
+
+    command {
+        # Read the BED file and process each line
+        while IFS=$'\t' read -r chr start end name; do
+            new_start=$((start - padding))
+            new_end=$((end + padding))
+            if (( new_start < 1 )); then new_start=1; fi
+
+            region="${chr}:${new_start}-${new_end}"
+            out_vcf="${name}.vcf.gz"
+            
+            # Extract the region from the VCF using tabix
+            tabix --threads "${cpu}" "${VCF}" "${region}" > "${out_vcf}"
+            tabix -p vcf "${out_vcf}"  # Index the output VCF
+        done < "${proteome_bed}"
+    }
+
+    runtime {
+        # Specify the resources required for the task
+        docker: "quay.io/biocontainers/tabix:0.2.5--0"  # Example Docker image for tabix
+        cpu: 1  # Default CPU allocation
+        memory: "4 GB"  # Default memory allocation
+    }
+
+    output {
+        Array[File] out_vcfs = glob("*.vcf.gz")  # Collect all output VCF files
+    }
+}
+
+
+
 task colocboost {
 
     #File VCF
@@ -45,5 +83,6 @@ task colocboost {
 
 
 workflow colocboost_wdl {
+    call splitvcf
     call colocboost
 }
