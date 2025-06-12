@@ -1,15 +1,19 @@
+version 1.0
+
 task split_vcf {
-    String VCF
-    String VCF_index
+    File VCF
+    File VCF_index
     File proteome_bed
     Int padding
     Int disk_space
     
     parameter_meta {
         VCF: {
+          description: "Cloud VCF file",
           localization_optional: true
         }
         VCF_index: {
+          description: "Cloud VCF index",
           localization_optional: true
         }
     }
