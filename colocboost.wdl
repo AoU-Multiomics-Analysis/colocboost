@@ -1,10 +1,11 @@
 task colocboost {
 
     File VCF
+    File VCF_index
     File transcriptome_bed 
     File proteome_bed
     File transcriptome_covars 
-    File proteome_covars 
+    File proteome_covars
     String phenotype_id
 
     String docker_image
