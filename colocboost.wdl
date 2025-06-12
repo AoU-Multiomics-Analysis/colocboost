@@ -56,7 +56,7 @@ task split_vcf {
     }
 
     command {
-        echo ${proteome_bed}"
+        echo ${proteome_bed}
 
         bgzip -c "${proteome_bed}" > proteome.bed
 
