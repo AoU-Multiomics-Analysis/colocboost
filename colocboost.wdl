@@ -62,7 +62,7 @@ task split_vcf {
 
         #zcat ${proteome_bed} > zcat_proteome.bed
         
-        head proteome.bed
+        #head proteome.bed
         
         while IFS=$'\t' read -r chr start_pos end_pos name; do
             new_start=$((start_pos - padding))
