@@ -98,6 +98,7 @@ task colocboost {
 
 workflow colocboost_wdl {
     input {
+        File transcriptome_bed
         File proteome_bed
         File transcriptome_covars
         File proteome_covars
