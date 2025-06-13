@@ -60,13 +60,13 @@ task split_vcf {
 
         bgzip -d --output proteome.bed "${proteome_bed}"
 
-        zcat ${proteome_bed} > zcat_proteome.bed
+        #zcat ${proteome_bed} > zcat_proteome.bed
         
         head proteome.bed
         
-        while IFS=$'\t' read -r chr start end name; do
-            new_start=$((start - padding))
-            new_end=$((end + padding))
+        while IFS=$'\t' read -r chr start_pos end_pos name; do
+            new_start=$((start_pos - padding))
+            new_end=$((end_pos + padding))
             if (( new_start < 1 )); then new_start=1; fi
 
             region="$chr:$new_start-$new_end"
@@ -80,7 +80,7 @@ task split_vcf {
             # Extract the region from the VCF using tabix
             tabix --threads 1 "${VCF}" $region > $out_vcf
             tabix -p vcf $out_vcf  # Index the output VCF
-        done < zcat_proteome.bed
+        done < proteome.bed
     }
 
     runtime {
