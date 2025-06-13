@@ -57,7 +57,8 @@ task split_vcf {
 
     command {
         echo ${proteome_bed}
-
+        echo "Padding"
+        echo ${padding}
         #bgzip -d --output proteome.bed "${proteome_bed}"
 
         while IFS=$'\t' read -r chr start_pos end_pos name; do
