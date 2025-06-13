@@ -43,17 +43,6 @@ task split_vcf {
         Int padding
         Int disk_space
     }
-    
-    parameter_meta {
-        VCF: {
-          description: "Cloud VCF file",
-          localization_optional: true
-        }
-        VCF_index: {
-          description: "Cloud VCF index",
-          localization_optional: true
-        }
-    }
 
     command {
         echo ${proteome_bed}
