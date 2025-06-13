@@ -54,9 +54,9 @@ task split_vcf {
 }
 
 task colocboost {
-    File VCF
-    File VCF_index
     input {
+        File VCF
+        File VCF_index
         File transcriptome_bed 
         File proteome_bed
         File transcriptome_covars 
