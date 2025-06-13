@@ -60,9 +60,6 @@ task split_vcf {
 
         #bgzip -d --output proteome.bed "${proteome_bed}"
 
-        # Extract the first four columns from proteome.bed
-        #awk '{print \$1, \$2, \$3, \$4}' proteome.bed > proteome_four_columns.bed
-
         while IFS=$'\t' read -r chr start_pos end_pos name; do
             new_start=$((start_pos - padding))
             new_end=$((end_pos + padding))
