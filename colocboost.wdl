@@ -60,27 +60,26 @@ task split_vcf {
 
         bgzip -d --output proteome.bed "${proteome_bed}"
 
-        #zcat ${proteome_bed} > zcat_proteome.bed
-        
-        #head proteome.bed
-        
-        awk '{print $1, $2, $3, $4}' proteome.bed | while IFS=$'\t' read -r chr start_pos end_pos name; do
+        # Extract the first four columns from proteome.bed
+        awk '{print $1, $2, $3, $4}' proteome.bed > proteome_four_columns.bed
+
+        while IFS=$'\t' read -r chr start_pos end_pos name; do
             new_start=$((start_pos - padding))
             new_end=$((end_pos + padding))
             if (( new_start < 1 )); then new_start=1; fi
-        
+
             region="$chr:$new_start-$new_end"
             out_vcf="$name.vcf.gz"
-        
+
             echo $new_start
             echo $new_end
             echo $region
             echo $out_vcf
-        
+
             # Extract the region from the VCF using tabix
             tabix "${VCF}" $region > "$out_vcf"
             tabix -p vcf "$out_vcf"  # Index the output VCF
-        done
+        done < proteome_four_columns.bed
     }
 
     runtime {
