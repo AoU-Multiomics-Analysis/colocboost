@@ -97,6 +97,16 @@ task colocboost {
 
 
 workflow colocboost_wdl {
+    input {
+        File proteome_bed
+        File transcriptome_covars
+        File proteome_covars
+
+        String docker_image
+        Int memory
+        Int disk_space
+        Int num_threads
+    }
     call split_vcf
 
     scatter (index in range(length(split_vcf.out_vcfs))) {
