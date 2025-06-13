@@ -61,8 +61,8 @@ task split_vcf {
         #bgzip -d --output proteome.bed "${proteome_bed}"
 
         while IFS=$'\t' read -r chr start_pos end_pos name; do
-            new_start=$((start_pos - padding))
-            new_end=$((end_pos + padding))
+            new_start=$((start_pos - ${padding}))
+            new_end=$((end_pos + ${padding}))
             if (( new_start < 1 )); then new_start=1; fi
 
             region="$chr:$new_start-$new_end"
