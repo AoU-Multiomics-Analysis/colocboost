@@ -63,7 +63,7 @@ task split_vcf {
             echo $out_vcf
 
             # Extract the region from the VCF using tabix
-            bcftools view "${VCF}" -r $region > "$out_vcf"
+            bcftools view -r $region -Oz "${VCF}"  > "$out_vcf"
             bcftools index -t -o "$out_vcf" "$out_vcf"  # Index the output VCF
         done < ${proteome_bed}
     }
