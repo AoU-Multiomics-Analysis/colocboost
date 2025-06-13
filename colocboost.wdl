@@ -57,6 +57,10 @@ task split_vcf {
             region="$chr:$new_start-$new_end"
             out_vcf="$name.vcf.gz"
 
+            echo "Entry"
+            echo $start_pos
+            echo $end_pos
+            echo "Padding Entry"
             echo $new_start
             echo $new_end
             echo $region
