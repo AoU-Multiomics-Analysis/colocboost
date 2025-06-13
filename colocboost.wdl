@@ -78,8 +78,8 @@ task split_vcf {
             echo $out_vcf
 
             # Extract the region from the VCF using tabix
-            tabix --threads 1 "${VCF}" $region > $out_vcf
-            tabix -p vcf $out_vcf  # Index the output VCF
+            tabix "${VCF}" $region > "$out_vcf"
+            tabix -p vcf "$out_vcf"  # Index the output VCF
         done < proteome.bed
     }
 
