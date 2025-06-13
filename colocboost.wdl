@@ -1,40 +1,5 @@
 version 1.0
 
-task stream_vcf {
-    input {
-        File VCF
-        File VCF_index
-        Int disk_space
-    }
-    
-    parameter_meta {
-        VCF: {
-          description: "Cloud VCF file",
-          localization_optional: true
-        }
-        VCF_index: {
-          description: "Cloud VCF index",
-          localization_optional: true
-        }
-    }
-
-    command {
-        bcftools view ${VCF} -r chr1:1000171-1000172
-    }
-
-    runtime {
-        # Specify the resources required for the task
-        docker: "quay.io/biocontainers/bcftools:1.22--h3a4d415_0"  # Example Docker image for tabix
-        cpu: 1  # Default CPU allocation
-        memory: "4 GB"  # Default memory allocation
-        disks: "local-disk ${disk_space} HDD"
-    }
-
-    output {
-        Array[File] out_vcfs = glob("*.vcf.gz")  # Collect all output VCF files
-    }
-}
-
 task split_vcf {
     input {
         File VCF
@@ -43,17 +8,6 @@ task split_vcf {
         Int padding
         Int disk_space
     }
-
-    parameter_meta {
-        VCF: {
-          description: "Cloud VCF file",
-          localization_optional: true
-        }
-        VCF_index: {
-          description: "Cloud VCF index",
-          localization_optional: true
-        }
-    }    
 
     command {
         echo ${proteome_bed}
@@ -99,12 +53,9 @@ task split_vcf {
     }
 }
 
-
-
 task colocboost {
-
-    #File VCF
-    #File VCF_index
+    File VCF
+    File VCF_index
     input {
         File transcriptome_bed 
         File proteome_bed
@@ -119,10 +70,6 @@ task colocboost {
     }
 
     command{
-    echo "/src"
-    ls /src
-    echo "workdir"
-    ls .
     cp /src/* .
     Rscript run_colocboost.R \
         --transcriptome_bed ${transcriptome_bed} \
@@ -150,7 +97,29 @@ task colocboost {
 
 
 workflow colocboost_wdl {
-    call stream_vcf
     call split_vcf
-    call colocboost
+
+    scatter (index in range(length(split_vcf.out_vcfs))) {
+        String vcf_file_name = basename(split_vcf.out_vcfs[index])
+        String phenotype_id = sub(vcf_file_name, ".vcf.gz$", "")
+        
+        call colocboost {
+            input:
+                VCF = split_vcf.out_vcfs[index],
+                VCF_index = split_vcf.out_indexes[index],
+                transcriptome_bed = transcriptome_bed,
+                proteome_bed = proteome_bed,
+                transcriptome_covars = transcriptome_covars,
+                proteome_covars = proteome_covars,
+                phenotype_id = phenotype_id,
+                docker_image = docker_image,
+                memory = memory,
+                disk_space = disk_space,
+                num_threads = num_threads
+        }
+    }
+
+    output {
+        Array[File] colocboost_results = colocboost.colocboost_res
+    }
 }
