@@ -117,7 +117,7 @@ workflow colocboost_wdl {
         call colocboost {
             input:
                 VCF = split_vcf.out_vcfs[index],
-                VCF_index = split_vcf.out_indexes[index],
+                VCF_index = split_vcf.out_index[index],
                 transcriptome_bed = transcriptome_bed,
                 proteome_bed = proteome_bed,
                 transcriptome_covars = transcriptome_covars,
