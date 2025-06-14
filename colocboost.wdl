@@ -53,7 +53,7 @@ task split_vcf {
         File VCF
         File VCF_index
         String chromosome
-        File proteome_bed
+        File trimmed_proteome_bed
         Int padding
         Int disk_space
     }
