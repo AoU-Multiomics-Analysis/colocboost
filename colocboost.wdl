@@ -9,6 +9,10 @@ task split_vcf_by_chromosome {
 
     command <<<
         # Check if the input VCF file is valid
+        echo ${VCF}
+        echo "${VCF}"
+        echo ~{VCF}
+        echo "~{VCF}"
         echo "VCF file: ${VCF}"
         echo "Checking file"
         bcftools view -h "${VCF}" > /dev/null
