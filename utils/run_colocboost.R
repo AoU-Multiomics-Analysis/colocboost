@@ -2,6 +2,8 @@ library(tidyverse)
 library(data.table)
 library(colocboost)
 library(argparse)
+library(janitor)
+library(bedr)
 source('colocboost_utils.R')
 
 ###### PARSE COMMAND LINE  ARGUMENTS ######
