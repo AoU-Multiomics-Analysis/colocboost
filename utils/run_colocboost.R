@@ -9,15 +9,15 @@ parser <- ArgumentParser()
 
 parser$add_argument("-vcf", "--vcf", dest="filename", required=TRUE,
     help="Path to VCF file")
-parser$add_argument("-transcriptome_bed", "--transcriptome_bed", dest="filename", required=TRUE,
+parser$add_argument("-transcriptome_bed", "--transcriptome_bed", required=TRUE,
     help="Path to bed file")
-parser$add_argument("-proteome_bed", "--proteome_bed", dest="filename", required=TRUE,
+parser$add_argument("-proteome_bed", "--proteome_bed", required=TRUE,
     help="Path to gwas file")
-parser$add_argument("-transcriptome_covars", "--transcriptome_covars", dest="filename", required=TRUE,
+parser$add_argument("-transcriptome_covars", "--transcriptome_covars", required=TRUE,
     help="Path to covars file")
-parser$add_argument("-proteome_covars", "--proteome_covars", dest="filename", required=TRUE,
+parser$add_argument("-proteome_covars", "--proteome_covars", required=TRUE,
     help="Path to gwas file")
-parser$add_argument("-phenotype_id", "--phenotype_id", dest="filename", required=TRUE,
+parser$add_argument("-phenotype_id", "--phenotype_id", required=TRUE,
     help="phenotype_id_string")
 
 
