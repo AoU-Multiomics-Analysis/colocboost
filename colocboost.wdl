@@ -8,12 +8,15 @@ task split_vcf_by_chromosome {
     }
 
     command <<<
+        # Check if the input VCF file is valid
+        bcftools view -h ${VCF} > /dev/null
+
         # Extract the list of chromosomes from the VCF file
-        bcftools index -s ${VCF} | cut -f1 | grep -v "^#" > chromosomes.txt
+        bcftools view -h ${VCF} | grep "^##contig" | sed 's/##contig=<ID=//;s/,.*//' > chromosomes.txt
 
         # Split the VCF file by chromosome
         while read chr; do
-            out_vcf="${chr}.vcf.gz"
+            out_vcf="${chr}.vcf.bgz"
             bcftools view -r $chr -Oz ${VCF} > $out_vcf
             bcftools index -t $out_vcf
         done < chromosomes.txt
