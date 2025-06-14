@@ -62,7 +62,7 @@ task split_vcf {
         echo ~{proteome_bed}
         echo "Padding"
         echo ~{padding}
-
+        bcftools index -t ~{VCF}
         while IFS=$'\t' read -r chr start_pos end_pos name; do
             new_start=$((start_pos - ~{padding}))
             new_end=$((end_pos + ~{padding}))
