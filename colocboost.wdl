@@ -52,6 +52,7 @@ task split_vcf {
     input {
         File VCF
         File VCF_index
+        String chromosome
         File proteome_bed
         Int padding
         Int disk_space
@@ -66,7 +67,7 @@ task split_vcf {
             new_start=$((start_pos - ~{padding}))
             new_end=$((end_pos + ~{padding}))
             if (( new_start < 1 )); then new_start=1; fi
-
+            if (( ~{chromosome} = $chr )); then continue; fi
             region="$chr:$new_start-$new_end"
             out_vcf="$name.vcf.gz"
 
@@ -160,12 +161,15 @@ workflow colocboost_wdl {
     }
 
     scatter (chrom_index in range(length(split_vcf_by_chromosome.chrom_vcfs))) {
+        String vcf_chr = basename(split_vcf_by_chromosome.chrom_vcfs[chrom_index])
+        String chromosome = sub(vcf_chr, ".vcf.bgz$", "")
         call split_vcf {
             input:
                 VCF = split_vcf_by_chromosome.chrom_vcfs[chrom_index],
                 VCF_index = split_vcf_by_chromosome.chrom_indexes[chrom_index],
+                chromosome = chromosome,
                 proteome_bed = proteome_bed,
-                padding = 1000,  # Adjust padding as needed
+                padding = 1000000,  # Adjust padding as needed
                 disk_space = disk_space
         }
 
