@@ -175,6 +175,6 @@ workflow colocboost_wdl {
     }
 
     output {
-        Array[File] colocboost_results = colocboost.colocboost_res
+        Array[File] colocboost_results = flatten(split_vcf.colocboost.colocboost_res)
     }
 }
