@@ -140,8 +140,8 @@ task colocboost {
 
 workflow colocboost_wdl {
     input {
-        File VCF
-        File VCF_index
+        File VCF_workflow
+        File VCF_workflow_index
         File transcriptome_bed
         File proteome_bed
         File transcriptome_covars
@@ -155,8 +155,8 @@ workflow colocboost_wdl {
 
     call split_vcf_by_chromosome {
         input:
-            VCF = VCF,
-            VCF_index = VCF_index,
+            VCF = VCF_workflow,
+            VCF_index = VCF_workflow_index,
             disk_space = disk_space
     }
 
