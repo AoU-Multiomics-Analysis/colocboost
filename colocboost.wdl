@@ -9,13 +9,14 @@ task split_vcf_by_chromosome {
 
     command <<<
         # Check if the input VCF file is valid
+        echo "${VCF}"
         echo "Checking file"
         bcftools view -h "${VCF}" > /dev/null
     
         # Extract the list of chromosomes from the VCF file
         echo "Extracting chromosomes"
         bcftools view -h "${VCF}" | grep "^##contig" | sed 's/##contig=<ID=//;s/,.*//' > chromosomes.txt
-
+        head chromosomes.txt
         # Split the VCF file by chromosome
         echo "Looping"
         while read chr; do
