@@ -43,8 +43,8 @@ task split_vcf_by_chromosome {
     }
 
     output {
-        Array[File] chrom_vcfs = glob("*.vcf.gz")
-        Array[File] chrom_indexes = glob("*.vcf.gz.tbi")
+        Array[File] chrom_vcfs = glob("*.vcf.bgz")
+        Array[File] chrom_indexes = glob("*.vcf.bgz.tbi")
     }
 }
 
