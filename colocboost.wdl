@@ -9,22 +9,30 @@ task split_vcf_by_chromosome {
 
     command <<<
         # Check if the input VCF file is valid
-        echo "${VCF}"
+        echo "VCF file: ${VCF}"
         echo "Checking file"
         bcftools view -h "${VCF}" > /dev/null
     
         # Extract the list of chromosomes from the VCF file
         echo "Extracting chromosomes"
         bcftools view -h "${VCF}" | grep "^##contig" | sed 's/##contig=<ID=//;s/,.*//' > chromosomes.txt
-        head chromosomes.txt
+        echo "Chromosomes:"
+        cat chromosomes.txt
+
         # Split the VCF file by chromosome
-        echo "Looping"
+        echo "Looping through chromosomes"
         while read chr; do
-            echo "$chr"
+            echo "Processing chromosome: $chr"
             out_vcf="${chr}.vcf.bgz"
-            echo "$out_vcf"
-            bcftools view -r $chr -Oz ${VCF} > $out_vcf
-            bcftools index -t $out_vcf
+            echo "Output VCF: $out_vcf"
+            if ! bcftools view -r $chr -Oz "${VCF}" > $out_vcf; then
+                echo "Error: Failed to split VCF file by chromosome $chr."
+                exit 1
+            fi
+            if ! bcftools index -t $out_vcf; then
+                echo "Error: Failed to index VCF file $out_vcf."
+                exit 1
+            fi
         done < chromosomes.txt
     >>>
 
