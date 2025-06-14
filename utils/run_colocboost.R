@@ -26,16 +26,16 @@ args <- parser$parse_args()
 ###### SET PATHS ######## 
 
 # load path to bed files
-transcriptome_bed_path <- basename(args$transcriptome_bed)
-proteome_bed_path <- basename(args$proteome_bed)
+transcriptome_bed_path <- args$transcriptome_bed
+proteome_bed_path <- args$proteome_bed
 
 # load paths to covariate files
-transcriptome_covars_path <- basename(args$transcriptome_covars)
-proteome_covars_path <- basename(args$proteome_covars)
+transcriptome_covars_path <- args$transcriptome_covars
+proteome_covars_path <- args$proteome_covars
 
 
 phenotype_id <- args$phenotype_id
-VCF_file_path <- basename(args$vcf)
+VCF_file_path <- args$vcf
 
 outfile <- paste0(phenotype_id,'_colocboost_res.RDS') 
 ########### LOAD FILES #########
