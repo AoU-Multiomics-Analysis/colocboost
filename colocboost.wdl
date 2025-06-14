@@ -29,6 +29,8 @@ task split_vcf_by_chromosome {
             echo "Processing chromosome: $chr"
             out_vcf="${chr}.vcf.bgz"
             echo "Output VCF: $out_vcf"
+            bcftools view -r $chr -Oz "~{VCF}" > $out_vcf
+            bcftools index -t $out_vcf
         done < chromosomes.txt
     >>>
 
