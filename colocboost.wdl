@@ -57,13 +57,13 @@ task split_vcf {
     }
 
     command <<<
-        echo ${proteome_bed}
+        echo ~{proteome_bed}
         echo "Padding"
-        echo ${padding}
+        echo ~{padding}
 
         while IFS=$'\t' read -r chr start_pos end_pos name; do
-            new_start=$((start_pos - ${padding}))
-            new_end=$((end_pos + ${padding}))
+            new_start=$((start_pos - ~{padding}))
+            new_end=$((end_pos + ~{padding}))
             if (( new_start < 1 )); then new_start=1; fi
 
             region="$chr:$new_start-$new_end"
@@ -79,9 +79,9 @@ task split_vcf {
             echo $out_vcf
 
             # Extract the region from the VCF using tabix
-            bcftools view -r $region -Oz "${VCF}" > "$out_vcf"
+            bcftools view -r $region -Oz "~{VCF}" > "$out_vcf"
             bcftools index -t "$out_vcf"  # Index the output VCF
-        done < ${proteome_bed}
+        done < ~{proteome_bed}
     >>>
 
     runtime {
@@ -116,11 +116,11 @@ task colocboost {
     command <<<
         cp /src/* .
         Rscript run_colocboost.R \
-            --transcriptome_bed ${transcriptome_bed} \
-            --proteome_bed ${proteome_bed}  \
-            --transcriptome_covars ${transcriptome_covars}  \
-            --proteome_covars ${proteome_covars} \
-            --phenotype_id ${phenotype_id} 
+            --transcriptome_bed ~{transcriptome_bed} \
+            --proteome_bed ~{proteome_bed}  \
+            --transcriptome_covars ~{transcriptome_covars}  \
+            --proteome_covars ~{proteome_covars} \
+            --phenotype_id ~{phenotype_id} 
     >>>
 
     runtime {
