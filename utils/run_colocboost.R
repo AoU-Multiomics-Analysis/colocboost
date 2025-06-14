@@ -7,7 +7,7 @@ source('colocboost_utils.R')
 ###### PARSE COMMAND LINE  ARGUMENTS ######
 parser <- ArgumentParser()
 
-parser$add_argument("-vcf", "--vcf", dest="filename", required=TRUE,
+parser$add_argument("-vcf", "--vcf", required=TRUE,
     help="Path to VCF file")
 parser$add_argument("-transcriptome_bed", "--transcriptome_bed", required=TRUE,
     help="Path to bed file")
