@@ -67,7 +67,7 @@ task split_vcf {
             new_start=$((start_pos - ~{padding}))
             new_end=$((end_pos + ~{padding}))
             if (( new_start < 1 )); then new_start=1; fi
-            if (( ~{chromosome} = $chr )); then continue; fi
+            if [[ "~{chromosome}" != "$chr" ]]; then continue; fi
             region="$chr:$new_start-$new_end"
             out_vcf="$name.vcf.gz"
 
