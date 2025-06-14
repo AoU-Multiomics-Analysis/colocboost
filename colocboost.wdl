@@ -87,7 +87,7 @@ task split_vcf {
     >>>
 
     runtime {
-        docker: "epadhi/bcftools_bgzip:latest"
+        docker: "quay.io/biocontainers/bcftools:1.22--h3a4d415_0"
         cpu: 1
         memory: "4 GB"
         disks: "local-disk ${disk_space} HDD"
