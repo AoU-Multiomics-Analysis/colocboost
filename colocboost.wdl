@@ -170,7 +170,7 @@ workflow colocboost_wdl {
                 VCF = split_vcf_by_chromosome.chrom_vcfs[chrom_index],
                 VCF_index = split_vcf_by_chromosome.chrom_indexes[chrom_index],
                 chromosome = chromosome,
-                proteome_bed = proteome_bed,
+                trimmed_proteome_bed = trimmed_proteome_bed,
                 padding = 1000000,  # Adjust padding as needed
                 disk_space = disk_space
         }
