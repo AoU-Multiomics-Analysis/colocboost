@@ -59,7 +59,7 @@ task split_vcf {
     }
 
     command <<<
-        echo ~{proteome_bed}
+        echo ~{trimmed_proteome_bed}
         echo "Padding"
         echo ~{padding}
         bcftools index -t ~{VCF}
