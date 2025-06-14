@@ -144,6 +144,7 @@ workflow colocboost_wdl {
         File VCF_workflow
         File VCF_workflow_index
         File transcriptome_bed
+        File trimmed_proteome_bed
         File proteome_bed
         File transcriptome_covars
         File proteome_covars
