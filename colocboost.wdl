@@ -117,6 +117,7 @@ task colocboost {
 
     command <<<
         cp /src/* .
+        tabix -p vcf ~{VCF}
         Rscript run_colocboost.R \
             --vcf ~{VCF} \
             --transcriptome_bed ~{transcriptome_bed} \
