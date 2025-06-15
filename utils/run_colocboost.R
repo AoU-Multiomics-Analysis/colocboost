@@ -60,7 +60,7 @@ subset_transcriptomics <- expression_bed_df %>% select(any_of(colnames(proteomic
 subset_proteomics <- proteomic_bed_df %>% select(any_of(colnames(expression_bed_df)))
 
 # filter covariate data so that it corresponds to the samples with both assays 
-subset_proteomic_covars <- proteomic_covars_df %>% filter(row.names(.) %in% colnames(proteomic_bed_df))
+subset_proteomic_covars <- proteome_covars_df %>% filter(row.names(.) %in% colnames(proteomic_bed_df))
 subset_transcriptomic_covars <- expression_covars_df %>% filter(row.names(.) %in% colnames(expression_bed_df))
 
 
