@@ -29,7 +29,7 @@ args <- parser$parse_args()
 
 # load path to bed files
 transcriptome_bed_path <- args$transcriptome_bed
-proteome_bed_path <- args$proteome_bed
+proteomic_bed_path <- args$proteome_bed
 
 # load paths to covariate files
 transcriptome_covars_path <- args$transcriptome_covars
