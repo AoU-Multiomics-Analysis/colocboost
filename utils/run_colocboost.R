@@ -57,7 +57,7 @@ proteome_covars_df <- fread(proteome_covars_path) %>% prep_covar_data
 subset_transcriptomics <- expression_bed_df %>% select(any_of(colnames(proteome_bed_df)))
 
 # take proteomic individual data and subset to those that  are in the transcriptomic df
-subset_proteomics <- proteomic_bed_df %>% select(any_of(colnames(expression_bed_df)))
+subset_proteomics <- proteome_bed_df %>% select(any_of(colnames(expression_bed_df)))
 
 # filter covariate data so that it corresponds to the samples with both assays 
 subset_proteomic_covars <- proteome_covars_df %>% filter(row.names(.) %in% colnames(proteome_bed_df))
