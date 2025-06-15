@@ -29,7 +29,7 @@ args <- parser$parse_args()
 
 # load path to bed files
 transcriptome_bed_path <- args$transcriptome_bed
-proteomic_bed_path <- args$proteome_bed
+proteome_bed_path <- args$proteome_bed
 
 # load paths to covariate files
 transcriptome_covars_path <- args$transcriptome_covars
@@ -42,7 +42,7 @@ VCF_file_path <- args$vcf
 outfile <- paste0(phenotype_id,'_colocboost_res.RDS') 
 ########### LOAD FILES #########
 # load individual level data 
-proteome_bed_df <- fread(proteome_bed_path)
+proteomic_bed_df <- fread(proteome_bed_path)
 expression_bed_df <- fread(transcriptome_bed_path)
 
 
