@@ -42,7 +42,7 @@ VCF_file_path <- args$vcf
 outfile <- paste0(phenotype_id,'_colocboost_res.RDS') 
 ########### LOAD FILES #########
 # load individual level data 
-proteomic_bed_df <- fread(proteome_bed_path)
+proteome_bed_df <- fread(proteome_bed_path)
 expression_bed_df <- fread(transcriptome_bed_path)
 
 
@@ -54,13 +54,13 @@ proteome_covars_df <- fread(proteome_covars_path) %>% prep_covar_data
 ####### PREPROCESS BED AND COVAR FILES #######
 
 # take expression individual data and subset to those that  are in the proteomic df
-subset_transcriptomics <- expression_bed_df %>% select(any_of(colnames(proteomic_bed_df)))
+subset_transcriptomics <- expression_bed_df %>% select(any_of(colnames(proteome_bed_df)))
 
 # take proteomic individual data and subset to those that  are in the transcriptomic df
 subset_proteomics <- proteomic_bed_df %>% select(any_of(colnames(expression_bed_df)))
 
 # filter covariate data so that it corresponds to the samples with both assays 
-subset_proteomic_covars <- proteome_covars_df %>% filter(row.names(.) %in% colnames(proteomic_bed_df))
+subset_proteomic_covars <- proteome_covars_df %>% filter(row.names(.) %in% colnames(proteome_bed_df))
 subset_transcriptomic_covars <- expression_covars_df %>% filter(row.names(.) %in% colnames(expression_bed_df))
 
 
@@ -71,7 +71,7 @@ colocboost_res <- proteome_transcriptome_coloc(phenotype_id,
                                                 subset_proteomics,
                                                 subset_transcriptomic_covars,
                                                 subset_proteomic_covars,
-                                                VCF_path
+                                                VCF_file_path
                                             )
 saveRDS(colocboost_res,outfile)
 
