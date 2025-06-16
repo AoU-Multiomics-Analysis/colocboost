@@ -23,4 +23,4 @@ RUN mkdir -p /src
 WORKDIR /src
 
 RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/colocboost_utils.R -o /src/colocboost_utils.R
-RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/run_colocboost.R -o ./run_colocboost.R
+RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/run_colocboost.R -o /src/run_colocboost.R
