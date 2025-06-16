@@ -4,6 +4,7 @@ task split_vcf_by_chromosome {
     input {
         File VCF
         File VCF_index
+        String chromosome
         Int disk_space
     }
 
@@ -16,23 +17,13 @@ task split_vcf_by_chromosome {
         echo "VCF file: ~{VCF}"
         echo "Checking file"
         bcftools view -h "~{VCF}" > /dev/null
-    
-        chromosomes=("chr1" "chr2" "chr3" "chr4" "chr5" "chr6" "chr7" "chr8" "chr9" "chr10" "chr11" "chr12" "chr13" "chr14" "chr15" "chr16" "chr17" "chr18" "chr19" "chr20" "chr21" "chr22" "chrX" "chrY")
-        for chr in "${chromosomes[@]}"; do
-            echo $chr >> chromosomes.txt
-        done
-        echo "Chromosomes:"
-        cat chromosomes.txt
 
         # Split the VCF file by chromosome
-        echo "Looping through chromosomes"
-        while read chr; do
-            echo "Processing chromosome: $chr"
-            out_vcf="${chr}.vcf.bgz"
-            echo "Output VCF: $out_vcf"
-            bcftools view -r $chr -Oz "~{VCF}" > $out_vcf
-            bcftools index -t $out_vcf
-        done < chromosomes.txt
+        echo "Processing chromosome: ~{chromosome}"
+        out_vcf="~{chromosome}.vcf.bgz"
+        echo "Output VCF: $out_vcf"
+        bcftools view -r ~{chromosome} -Oz "~{VCF}" > $out_vcf
+        bcftools index -t $out_vcf
     >>>
 
     runtime {
@@ -43,10 +34,11 @@ task split_vcf_by_chromosome {
     }
 
     output {
-        Array[File] chrom_vcfs = glob("*.vcf.bgz")
-        Array[File] chrom_indexes = glob("*.vcf.bgz.tbi")
+        File chrom_vcf = "~{chromosome}.vcf.bgz"
+        File chrom_index = "~{chromosome}.vcf.bgz.tbi"
     }
 }
+
 
 task split_vcf {
     input {
@@ -156,20 +148,21 @@ workflow colocboost_wdl {
         Int num_threads
     }
 
-    call split_vcf_by_chromosome {
-        input:
-            VCF = VCF_workflow,
-            VCF_index = VCF_workflow_index,
-            disk_space = disk_space
-    }
+    Array[String] chromosomes = ["chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"]
 
-    scatter (chrom_index in range(length(split_vcf_by_chromosome.chrom_vcfs))) {
-        String vcf_chr = basename(split_vcf_by_chromosome.chrom_vcfs[chrom_index])
-        String chromosome = sub(vcf_chr, ".vcf.bgz$", "")
+    scatter (chromosome in chromosomes) {
+        call split_vcf_by_chromosome {
+            input:
+                VCF = VCF_workflow,
+                VCF_index = VCF_workflow_index,
+                chromosome = chromosome,
+                disk_space = disk_space
+        }
+
         call split_vcf {
             input:
-                VCF = split_vcf_by_chromosome.chrom_vcfs[chrom_index],
-                VCF_index = split_vcf_by_chromosome.chrom_indexes[chrom_index],
+                VCF = split_vcf_by_chromosome.chrom_vcf,
+                VCF_index = split_vcf_by_chromosome.chrom_index,
                 chromosome = chromosome,
                 trimmed_proteome_bed = trimmed_proteome_bed,
                 padding = 1000000,  # Adjust padding as needed
