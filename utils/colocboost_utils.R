@@ -60,6 +60,10 @@ input_range <- phenotype_bed_file %>%
     mutate(range = paste0(`#chr`,':',start,'-',end)) %>%
     pull(range)
 
+# Print debug information
+print(paste("Input range:", input_range))
+print(paste("Tabix path:", tabix_path))
+    
 tabix_res <- tabix(input_range[1],tabix_path)
 tabix_res
 }
