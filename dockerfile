@@ -12,9 +12,15 @@ RUN micromamba -y -n base install  \
     conda-forge::r-data.table \
     conda-forge::r-bedr \
     bioconda::bedtools \
-    conda-forge::r-argparse
+    conda-forge::r-argparse \
+    conda-forge::r-janitor \
+    bioconda::htslib
 
 #RUN apt-get install -y wget
 
-RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/colocboost_utils.R -o ./colocboost_utils.R
-RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/run_colocboost.R -o ./run_colocboost.R
+RUN mkdir -p /src
+
+WORKDIR /src
+
+RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/colocboost_utils.R -o /src/colocboost_utils.R
+RUN curl  https://raw.githubusercontent.com/evin-padhi/colocboost_WDL/refs/heads/main/utils/run_colocboost.R -o /src/run_colocboost.R
