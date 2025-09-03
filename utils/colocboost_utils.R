@@ -126,7 +126,7 @@ genotype_matrix <- genotype_data %>% clean_genotype_data
 
 
 message('Extracting phenotype data')
-phenotype_vec <- expression_bed_df %>% extract_phenotype_vector(phenotype_id)
+phenotype_vec <- phenotype_bed %>% extract_phenotype_vector(phenotype_id)
 
 residualized_phenotype_vec <- phenotype_vec %>%  residualize_molecular_phenotype_data(covars_df)
 variant_metadata <-  extract_variant_metadata(genotype_matrix)
