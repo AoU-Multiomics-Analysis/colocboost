@@ -15,6 +15,19 @@ output <- covar_df  %>%
 output
 }
 
+partialize_data <- function(covars_df,gt_matrix,pheno_vec) {
+
+covariates_matrix <- covars_df %>% data.matrix()
+hat = diag(nrow(covariates_matrix)) - covariates_matrix %*% solve(crossprod(covariates_matrix)) %*% t(covariates_matrix)
+expression_vector = hat %*% phenotype_vec
+subset_gt_matrix = data.matrix(gt_matrix[rownames(pheno_vec),])
+gt_hat = hat %*% subset_gt_matrix 
+output <- list(pheno_vec = expression_vector,gt_hat = gt_hat)
+output 
+    
+}
+
+
 # residualizes phenotype data on covariates
 residualize_molecular_phenotype_data <- function(phenotype_vector,covars_df){
 joint_data <- phenotype_vector %>%
