@@ -77,7 +77,8 @@ genotype_matrix <- tabix_output %>%
         select(-CHROM,-POS,-ID,-REF,-ALT,-QUAL,-FILTER,-INFO,-FORMAT) %>%
         mutate(across(everything(),~str_remove(.,':.*')))  %>%
         mutate(across(everything(),~case_when(. == '0/0' ~ 0, . == '1/0' ~1,. == '0/1' ~1,. == '1/1' ~ 2,
-                                              . == '0|0' ~ 0, . == '1|0' ~1,. == '0|1' ~1,. == '1|1' ~ 2)))
+                                              . == '0|0' ~ 0, . == '1|0' ~1,. == '0|1' ~1,. == '1|1' ~ 2))) %>% 
+        zoo::na.aggregate()
 
 output_data <- bind_cols(variant_metadata,genotype_matrix) %>%
         column_to_rownames('ID') %>%
@@ -120,7 +121,7 @@ genotype_data  <- expression_bed_df %>%
     extract_genotype_vector(phenotype_id,VCF_path)
 genotype_matrix <- genotype_data %>% clean_genotype_data
 #filtered_genotype_matrix <- genotype_matrix[ , colSums(is.na(genotype_matrix)) == 0]
-filtered_genotype_matrix <- genotype_matrix[rowSums(is.na(genotype_matrix)) == 0 , ]
+#filtered_genotype_matrix <- genotype_matrix[rowSums(is.na(genotype_matrix)) == 0 , ]
 
 
 
@@ -128,10 +129,10 @@ message('Extracting phenotype data')
 phenotype_vec <- expression_bed_df %>% extract_phenotype_vector(phenotype_id)
 
 residualized_phenotype_vec <- phenotype_vec %>%  residualize_molecular_phenotype_data(covars_df)
-variant_metadata <-  extract_variant_metadata(filtered_genotype_matrix)
+variant_metadata <-  extract_variant_metadata(genotype_matrix)
 
 message('Computing LD')
-LD_matrix <- get_cormat(filtered_genotype_matrix)
+LD_matrix <- get_cormat(genotype_matrix)
 
 
 message('Creating output object')
