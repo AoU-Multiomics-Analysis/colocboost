@@ -117,7 +117,7 @@ preprocess_gene_coloc_boost <- function(phenotype_id,phenotype_bed,VCF_path,cova
 message(phenotype_id)
 
 message('Extracting genotype data')
-genotype_data  <- expression_bed_df %>%
+genotype_data  <- phenotype_bed %>%
     extract_genotype_vector(phenotype_id,VCF_path)
 genotype_matrix <- genotype_data %>% clean_genotype_data
 #filtered_genotype_matrix <- genotype_matrix[ , colSums(is.na(genotype_matrix)) == 0]
