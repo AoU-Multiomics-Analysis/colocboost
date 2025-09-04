@@ -13,7 +13,7 @@ task colocboost {
     Int num_threads
 
     command{
-    Rscript colocboost_summarystats.R \
+    Rscript /tmp/colocboost_summarystats.R \
         --GenotypeDosage ${GenotypeDosage} \
         --BedFile ${BedFile} \
         --Covars ${Covars}  \
