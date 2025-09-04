@@ -1,3 +1,5 @@
+version 1.0
+
 task colocboost {
 
     File GenotypeDosage 
@@ -16,7 +18,7 @@ task colocboost {
         --GenotypeDosage ${GenotypeDosage} \
         --BedFile ${BedFile} \
         --Covars ${Covars}  \
-        --SumstatsGWAS ${SumstatsGWAS} \
+        --SumstatsGWAS ${sep=" "SumstatsGWAS} \
         --PhenotypeID ${PhenotypeID} 
     }
     runtime {
@@ -28,7 +30,7 @@ task colocboost {
     }
     
     output {
-        File colocboost_res = "~{phenotype_id}_colocboost_res.RDS"
+        File colocboost_res = "~{PhenotypeID}_colocboost_res.RDS"
     }
 }
 
