@@ -5,7 +5,7 @@ library(colocboost)
 library(argparse)
 library(janitor)
 library(bedr)
-source('colocboost_utils.R')
+source('tmp/colocboost_utils.R')
 
 
 ###### PARSE COMMAND LINE  ARGUMENTS ######
