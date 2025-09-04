@@ -2,6 +2,7 @@ version: 1.2
 workflows:
   - subclass: WDL 
     primaryDescriptorPath: /workflows/colocboost.wdl
+    name: colocboost_cross_ome
   - subclass: WDL 
     primaryDescriptorPath: /workflows/colocboost_summarystats.wdl
-
+    name: colocboost_summarystats
