@@ -18,7 +18,7 @@ RUN micromamba -y -n base install  \
 
 #RUN apt-get install -y wget
 
-RUN cp utils/* . 
+RUN cp -r utils/* . 
 
 RUN mkdir -p /src
 
