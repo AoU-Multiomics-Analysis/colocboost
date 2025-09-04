@@ -7,7 +7,6 @@ task colocboost {
     Array[File] SumstatsGWAS
     String PhenotypeID 
 
-    String docker_image
     Int memory 
     Int disk_space 
     Int num_threads
@@ -21,7 +20,7 @@ task colocboost {
         --PhenotypeID ${PhenotypeID} 
     }
     runtime {
-    docker: docker_image
+    docker: "ghcr.io/aou-multiomics-analysis/colocboost:main"
     memory: "${memory}GB"
     disks: "local-disk ${disk_space} HDD"
     bootDiskSizeGb: 25
