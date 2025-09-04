@@ -15,7 +15,6 @@ parser$add_argument("-GenotypeDosage", "--GenotypeDosage", required=TRUE, help="
 parser$add_argument("-BedFile", "--BedFile", required=TRUE, help="Path to bed file")
 parser$add_argument("-Covars", "--Covars", required=TRUE, help="Path to covars file")
 parser$add_argument("-PhenotypeID", "--PhenotypeID", required=TRUE, help="phenotype_id_string")
-parser$add_argument("-Dosage", "--Dosage", required=TRUE, help="phenotype_id_string")
 parser$add_argument("-SumstatsGWAS", "--SumstatsGWAS", required=TRUE, nargs = "+")
 
 
@@ -50,7 +49,7 @@ PhenotypeID <- args$PhenotypeID
 
 Outfile <- paste0(PhenotypeID, '_colocboost_res.RDS') 
 
-DosageFile <- arg$Dosage
+DosageFile <- arg$GenotypeDosage
 
 SumstatsGWAS <- args$SumstatsGWAS
 

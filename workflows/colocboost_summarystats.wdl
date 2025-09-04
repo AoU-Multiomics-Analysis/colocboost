@@ -14,7 +14,7 @@ task colocboost {
 
     command{
     Rscript /tmp/colocboost_summarystats.R \
-        --Dosage ${GenotypeDosage} \
+        --GenotypeDosage ${GenotypeDosage} \
         --BedFile ${BedFile} \
         --Covars ${Covars}  \
         --SumstatsGWAS ${sep=" " SumstatsGWAS} \
