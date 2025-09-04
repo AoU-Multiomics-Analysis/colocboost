@@ -49,7 +49,7 @@ PhenotypeID <- args$PhenotypeID
 
 Outfile <- paste0(PhenotypeID, '_colocboost_res.RDS') 
 
-DosageFile <- arg$GenotypeDosage
+DosageFile <- args$GenotypeDosage
 
 SumstatsGWAS <- args$SumstatsGWAS
 
