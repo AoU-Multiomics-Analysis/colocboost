@@ -68,7 +68,7 @@ ColocboostObj <- preprocess_gene_coloc_boost(PhenotypeID,BedData,DosageFile,Cova
 
 message('Loading GWAS data')
 ListGWAS <- SumstatsGWAS %>%
-  map(make_gwas_summary) %>%
+  map(clean_GWAS_data) %>%
   flatten()
 
 message('Extracting QTL variants from GWAS')

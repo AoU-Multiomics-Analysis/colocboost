@@ -3,7 +3,8 @@ task colocboost {
     File GenotypeDosage 
     File GenotypeDosageIndex 
     File BedFile 
-    File Covars 
+    File Covars
+    Array[File] SumstatsGWAS
     String PhenotypeID 
 
     String docker_image
@@ -16,6 +17,7 @@ task colocboost {
         --GenotypeDosage ${GenotypeDosage} \
         --BedFile ${BedFile} \
         --Covars ${Covars}  \
+        --SumstatsGWAS ${SumstatsGWAS} \
         --PhenotypeID ${PhenotypeID} 
     }
     runtime {
@@ -27,11 +29,7 @@ task colocboost {
     }
     
     output {
-    
-    # i dont think this is right but the phenotype id should go in the 
-    # output
-    File colocboost_res = "~{phenotype_id}_colocboost_res.RDS"
-
+        File colocboost_res = "~{phenotype_id}_colocboost_res.RDS"
     }
 }
 
