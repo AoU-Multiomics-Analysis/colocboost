@@ -18,7 +18,7 @@ task colocboost {
         --GenotypeDosage ${GenotypeDosage} \
         --BedFile ${BedFile} \
         --Covars ${Covars}  \
-        --SumstatsGWAS ${sep=" "SumstatsGWAS} \
+        --SumstatsGWAS ${sep=" " SumstatsGWAS} \
         --PhenotypeID ${PhenotypeID} 
     }
     runtime {
