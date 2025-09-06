@@ -190,7 +190,6 @@ workflow colocboost_wdl {
                     phenotype_id = phenotype_id,
                     docker_image = docker_image,
                     memory = memory,
-                    disk_space = disk_space,
                     num_threads = num_threads
             }
         }
