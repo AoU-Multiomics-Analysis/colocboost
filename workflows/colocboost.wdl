@@ -103,9 +103,9 @@ task colocboost {
     
         String docker_image
         Int memory
-        String disk_type = "HDD"
-        Int disk_space 
-        Int boot_disk_space = 25
+        String disk_type = "LOCAL"
+        Int colocboost_disk_space = 0
+        Int boot_disk_space = 0
         Int num_threads
         Int preemptible = 3
         Int maxRetries = 1
@@ -126,7 +126,7 @@ task colocboost {
     runtime {
         docker: docker_image
         memory: "${memory}GB"
-        disks: "local-disk ${disk_space} ${disk_type}"
+        disks: "local-disk ${colocboost_disk_space} ${disk_type}"
         bootDiskSizeGb: boot_disk_space
         cpu: num_threads
         preemptible: preemptible
