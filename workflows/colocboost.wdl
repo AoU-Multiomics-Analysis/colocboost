@@ -102,8 +102,10 @@ task colocboost {
         String phenotype_id
     
         String docker_image
-        Int memory 
+        Int memory
+        String disk_type = "HDD"
         Int disk_space 
+        Int boot_disk_space = 25
         Int num_threads
     }
 
@@ -122,8 +124,8 @@ task colocboost {
     runtime {
         docker: docker_image
         memory: "${memory}GB"
-        disks: "local-disk ${disk_space} HDD"
-        bootDiskSizeGb: 25
+        disks: "local-disk ${disk_space} ${disk_type}"
+        bootDiskSizeGb: boot_disk_space
         cpu: num_threads
     }
     
