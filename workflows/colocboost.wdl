@@ -107,6 +107,8 @@ task colocboost {
         Int disk_space 
         Int boot_disk_space = 25
         Int num_threads
+        Int preemptible = 3
+        Int maxRetries = 1
     }
 
     command <<<
@@ -127,6 +129,8 @@ task colocboost {
         disks: "local-disk ${disk_space} ${disk_type}"
         bootDiskSizeGb: boot_disk_space
         cpu: num_threads
+        preemptible: preemptible
+        maxRetries: maxRetries
     }
     
     output {
