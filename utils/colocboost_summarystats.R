@@ -60,7 +60,7 @@ message('Loading Bedfile')
 BedData <- read_table(BedFilePath)
 
 message('Loading covariates')
-CovarsData <- CovarsPath %>% prep_covar_data 
+CovarsData <- fread(CovarsPath) %>% prep_covar_data 
 
 message('Preprocessing colocboost data')
 ColocboostObj <- preprocess_gene_coloc_boost(PhenotypeID,BedData,DosageFile,CovarsData)
