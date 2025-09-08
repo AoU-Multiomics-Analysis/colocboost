@@ -105,7 +105,7 @@ task colocboost {
         Int memory
         String disk_type = "LOCAL"
         Int colocboost_disk_space = 0
-        Int boot_disk_space = 0
+        Int boot_disk_space = 10
         Int num_threads
         Int preemptible = 3
         Int maxRetries = 1
