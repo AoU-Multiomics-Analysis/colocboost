@@ -1,4 +1,3 @@
-version 1.0
 
 task colocboost {
     input {
@@ -23,12 +22,12 @@ task colocboost {
         --PhenotypeID ~{PhenotypeID} 
     >>>
     runtime {
-    docker: "ghcr.io/aou-multiomics-analysis/colocboost:main"
-    memory: "~{memory}GB"
-    disks: "local-disk ~{disk_space} HDD"
-    bootDiskSizeGb: 25
-    preemptible: "~{NumPrempt}"
-    cpu: num_threads
+        docker: "ghcr.io/aou-multiomics-analysis/colocboost:main"
+        memory: "~{memory}GB"
+        disks: "local-disk ~{disk_space} HDD"
+        bootDiskSizeGb: 25
+        preemptible: "~{NumPrempt}"
+        cpu: num_threads
     }
     
     output {
