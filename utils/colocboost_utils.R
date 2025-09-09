@@ -1,9 +1,15 @@
 ### Preprocessing functions
 # helper function to load munged sumstats 
 # and format for MR 
-load_gwas_data <- function(GWAS_path){
-GWAS_dat <- fread(GWAS_path)
-GWAS_dat_cols <- colnames(GWAS_dat)
+load_gwas_data <- function(GWAS_path,bed_range){
+#GWAS_dat <- fread(GWAS_path)
+#GWAS_dat_cols <- colnames(GWAS_dat)
+
+GWAS_dat_cols <- strsplit(readLines(GWAS_path,n =1 ),split ='\t') %>% unlist()
+
+GWAS_dat <- tabix(bed_range,tabix_path)
+colnames(tabix_res) <- GWAS_dat_cols
+
 
 message(paste0('GWAS columns: ',GWAS_dat_cols,'\n'))
 
@@ -23,7 +29,7 @@ GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
     
 } else if (!'SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
 messasge('SE measurement is missing, computing from BETA and P value')
-GWAS_dat$SE <- TwoSampleMR::get_eff(GWAS_dat$BETA,GWAS_dat$P)
+GWAS_dat$SE <- TwoSampleMR::get_se(GWAS_dat$BETA,GWAS_dat$P)
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'BETA')
 
 } else if ('SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
@@ -206,6 +212,13 @@ phenotype_vec <- phenotype_bed %>% extract_phenotype_vector(phenotype_id)
 residualized_phenotype_vec <- phenotype_vec %>%  residualize_molecular_phenotype_data(covars_df)
 variant_metadata <-  extract_variant_metadata(genotype_matrix)
 
+phenotype_range <- phenotype_bed %>% 
+        filter(gene_id == phenotype_id) %>%
+        dplyr::select(`#chr`,start,end) %>%
+        transmute(range = paste0(`#chr`,':',start,'-',end)) %>% 
+        pull(range)
+ 
+
 message('Computing LD')
 LD_matrix <- get_cormat(genotype_matrix)
 
@@ -217,6 +230,7 @@ output <- list(LD_matrix = LD_matrix,
                phenotype_vec = phenotype_vec,
                genotype_matrix = genotype_matrix,
                genotype_data = genotype_data,
+               cis_window = phenotype_range,
                name = phenotype_id)
 output
 }

@@ -23,10 +23,10 @@ parser$add_argument("-SumstatsGWAS", "--SumstatsGWAS", required=TRUE, nargs = "+
 args <- parser$parse_args()
 
 
-clean_GWAS_data <- function(input_GWAS_data) {
-GWAS_name <- str_remove(basename(input_GWAS_data),'_munged_summary_statistics.tsv.gz')
+clean_GWAS_data <- function(input_GWAS_data,bed_range) {
+GWAS_name <- str_remove(basename(input_GWAS_data),'_munged_.*$')
 
-GWAS_dat <- load_gwas_data(input_GWAS_data) %>% 
+GWAS_dat <- load_gwas_data(input_GWAS_data,bed_range) %>% 
                 dplyr::rename('chromosome' = 2,
                                 'base_pair_location' = 3,
                                 'beta' =6,
@@ -69,7 +69,7 @@ ColocboostObj <- preprocess_gene_coloc_boost(PhenotypeID,BedData,DosageFile,Cova
 
 message('Loading GWAS data')
 ListGWAS <- SumstatsGWAS %>%
-  map(clean_GWAS_data) %>%
+  map(~clean_GWAS_data(.,ColocboostObj$cis_window)) %>%
   flatten()
 
 message('Extracting QTL variants from GWAS')
