@@ -1,19 +1,19 @@
 version 1.0
 
 task colocboost {
-
-    File GenotypeDosage 
-    File GenotypeDosageIndex 
-    File BedFile 
-    File Covars
-    Array[File] SumstatsGWAS
-    String PhenotypeID 
-    
-    Int NumPrempt
-    Int memory 
-    Int disk_space 
-    Int num_threads
-
+    input {
+        File GenotypeDosage 
+        File GenotypeDosageIndex 
+        File BedFile 
+        File Covars
+        Array[File] SumstatsGWAS
+        String PhenotypeID 
+        
+        Int NumPrempt
+        Int memory 
+        Int disk_space 
+        Int num_threads
+    }
     command <<<
     Rscript /tmp/colocboost_summarystats.R \
         --GenotypeDosage ~{GenotypeDosage} \
@@ -38,5 +38,32 @@ task colocboost {
 
 
 workflow colocboost_wdl {
-    call colocboost
+    input { 
+        File GenotypeDosage 
+        File GenotypeDosageIndex 
+        File BedFile 
+        File Covars
+        Array[File] SumstatsGWAS
+        String PhenotypeID 
+        
+        Int NumPrempt
+        Int memory 
+        Int disk_space 
+        Int num_threads
+
+    }
+
+    call colocboost {
+        input:
+            GenotypeDosage = GenotypeDosage,
+            GenotypeDosageIndex = GenotypeDosageIndex,
+            BedFile = BedFile,
+            Covars = Covars,
+            SumstatsGWAS = SumstatsGWAS,
+            PhenotypeID = PhenotypeID,
+            NumPrempt = NumPrempt,
+            memory = memory,
+            disk_space = disk_space,
+            num_threads = num_threads
+    }
 }
