@@ -15,9 +15,7 @@ RUN micromamba -y -n base install  \
     conda-forge::r-argparse \
     conda-forge::r-janitor \
     bioconda::htslib \ 
-    conda-forge::r-zoo \
-    dnachun::r-twosamplemr 
-
+    conda-forge::r-zoo 
 
 #RUN apt-get install -y wget
 
