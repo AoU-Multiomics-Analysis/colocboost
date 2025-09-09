@@ -34,7 +34,9 @@ GWAS_dat <- load_gwas_data(input_GWAS_data,bed_range) %>%
                                 'standard_error' = 'SE')  %>%
                 mutate(chromosome = paste0('chr',chromosome)) %>% 
                 mutate(base_pair_location = as.numeric(base_pair_location),
-                        beta = as.numeric(beta))
+                        beta = as.numeric(beta),
+                        standard_error = as.numeric(standard_error)
+                    )
 
 setNames(list(GWAS_dat),GWAS_name)
 }
