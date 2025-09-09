@@ -48,7 +48,8 @@ CovarsPath <- args$Covars
 
 PhenotypeID <- args$PhenotypeID
 
-Outfile <- paste0(PhenotypeID, '_colocboost_res.RDS') 
+OutFile <- paste0(PhenotypeID, '_colocboost_res.RDS') 
+message(paste0('Writing results to ',OutFile))
 
 DosageFile <- args$GenotypeDosage
 
@@ -83,5 +84,5 @@ ColocboostResult<- colocboost(X = ColocboostObj$resid_genotype_matrix,
            sumstat = SumstatData
            )
 message('Saving colocboost results')
-saveRDS(ColocboostResult,Outfile)
+saveRDS(ColocboostResult,file=OutFile)
 
