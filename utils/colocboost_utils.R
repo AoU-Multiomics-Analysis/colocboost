@@ -187,7 +187,7 @@ GWAS_data <- variant_metadata %>%
     mutate(pos = as.numeric(pos)) %>%
     mutate(variant = paste0(chromosome,'-',pos,'-',ref,'-',alt)) %>%
     left_join(GWAS_sumstats ,by = c('chromosome','pos' = 'base_pair_location') ) %>%
-    select(variant,beta,standard_error) %>%
+    select(variant,beta,standard_error,n) %>%
     dplyr::rename('sebeta' = 'standard_error')
 GWAS_data
 }
