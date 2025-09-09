@@ -14,7 +14,8 @@ RUN micromamba -y -n base install  \
     bioconda::bedtools \
     conda-forge::r-argparse \
     conda-forge::r-janitor \
-    bioconda::htslib
+    bioconda::htslib \ 
+    conda-forge::r-zoo
 
 #RUN apt-get install -y wget
 

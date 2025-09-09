@@ -7,7 +7,8 @@ task colocboost {
     File Covars
     Array[File] SumstatsGWAS
     String PhenotypeID 
-
+    
+    Int NumPrempt
     Int memory 
     Int disk_space 
     Int num_threads
@@ -25,6 +26,7 @@ task colocboost {
     memory: "${memory}GB"
     disks: "local-disk ${disk_space} HDD"
     bootDiskSizeGb: 25
+    preemptible: "${NumPrempt}"
     cpu: num_threads
     }
     
