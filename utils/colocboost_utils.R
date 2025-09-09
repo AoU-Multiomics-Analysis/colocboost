@@ -67,7 +67,7 @@ phenotype_data
 extract_genotype_vector <- function(phenotype_bed_file,protein_name,tabix_path){
 require(bedr)
     
-tabix_header <- strsplit(readLines(basename(tabix_path),n =1 ),split ='\t') %>% unlist()
+tabix_header <- strsplit(readLines(tabix_path,n =1 ),split ='\t') %>% unlist()
 
 input_range <- phenotype_bed_file %>%
     filter(gene_id == protein_name) %>%
