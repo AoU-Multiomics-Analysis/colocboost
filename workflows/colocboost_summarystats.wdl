@@ -6,6 +6,7 @@ workflow colocboost_wdl {
         File BedFile 
         File Covars
         Array[File] SumstatsGWAS
+        Array[File] SumstatsGWASIndex
         String PhenotypeID 
         
         Int NumPrempt
@@ -22,6 +23,7 @@ workflow colocboost_wdl {
             BedFile = BedFile,
             Covars = Covars,
             SumstatsGWAS = SumstatsGWAS,
+            SumstatsGWASIndex = SumstatsGWASIndex,
             PhenotypeID = PhenotypeID,
             NumPrempt = NumPrempt,
             memory = memory,
@@ -41,6 +43,7 @@ workflow colocboost_wdl {
             File BedFile 
             File Covars
             Array[File] SumstatsGWAS
+            Array[File] SumstatsGWASIndex
             String PhenotypeID 
             
             Int NumPrempt
