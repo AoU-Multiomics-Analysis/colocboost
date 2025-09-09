@@ -27,12 +27,14 @@ clean_GWAS_data <- function(input_GWAS_data,bed_range) {
 GWAS_name <- str_remove(basename(input_GWAS_data),'_munged_.*$')
 
 GWAS_dat <- load_gwas_data(input_GWAS_data,bed_range) %>% 
-                dplyr::rename('chromosome' = 2,
-                                'base_pair_location' = 3,
-                                'beta' =6,
+                dplyr::rename('chromosome' = 'CHR',
+                                'base_pair_location' = 'BP',
+                                'beta' ='beta.outcome',
                                 'n' = 'N',
                                 'standard_error' = 'SE')  %>%
-                mutate(chromosome = paste0('chr',chromosome))
+                mutate(chromosome = paste0('chr',chromosome)) %>% 
+                mutate(base_pair_location = as.numeric(base_pair_location),
+                        beta = as.numeric(beta))
 
 setNames(list(GWAS_dat),GWAS_name)
 }

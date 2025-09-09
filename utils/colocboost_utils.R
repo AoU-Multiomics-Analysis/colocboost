@@ -7,8 +7,10 @@ load_gwas_data <- function(GWAS_path,bed_range){
 
 GWAS_dat_cols <- strsplit(readLines(GWAS_path,n =1 ),split ='\t') %>% unlist()
 
-GWAS_dat <- tabix(bed_range,GWAS_path)
-colnames(tabix_res) <- GWAS_dat_cols
+
+bed_range <- str_remove(bed_range,'chr') %>% unlist()
+GWAS_dat <- tabix(bed_range,GWAS_path,check.chr = FALSE)
+colnames(GWAS_dat) <- GWAS_dat_cols
 
 
 message(paste0('GWAS columns: ',GWAS_dat_cols,'\n'))
@@ -23,13 +25,13 @@ GWAS_dat$FRQ <- NA
 
 if (!'SE' %in% GWAS_dat_cols & 'OR' %in% GWAS_dat_cols){
 message('SE measurement is missing, computing from OR and P value')
-GWAS_dat$SE <- get_se(GWAS_dat$OR,GWAS_dat$P)
+GWAS_dat$SE <- get_se(as.numeric(GWAS_dat$OR),as.numeric(GWAS_dat$P))
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
 
     
 } else if (!'SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
 messasge('SE measurement is missing, computing from BETA and P value')
-GWAS_dat$SE <- TwoSampleMR::get_se(GWAS_dat$BETA,GWAS_dat$P)
+GWAS_dat$SE <- TwoSampleMR::get_se(as.numeric(GWAS_dat$BETA),as.numeric(GWAS_dat$P))
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'BETA')
 
 } else if ('SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
@@ -184,7 +186,7 @@ extract_GWAS_data <- function(variant_metadata,GWAS_sumstats){
 GWAS_data <- variant_metadata %>%
     mutate(pos = as.numeric(pos)) %>%
     mutate(variant = paste0(chromosome,'-',pos,'-',ref,'-',alt)) %>%
-    left_join(GWAS_sumstats,by = c('chromosome','pos' = 'base_pair_location') ) %>%
+    left_join(GWAS_sumstats ,by = c('chromosome','pos' = 'base_pair_location') ) %>%
     select(variant,beta,standard_error,n) %>%
     dplyr::rename('sebeta' = 'standard_error')
 GWAS_data
@@ -215,6 +217,8 @@ variant_metadata <-  extract_variant_metadata(genotype_matrix)
 phenotype_range <- phenotype_bed %>% 
         filter(gene_id == phenotype_id) %>%
         dplyr::select(`#chr`,start,end) %>%
+        mutate(start = start -1000000,end = end + 1000000) %>% 
+        mutate(start = case_when(start < 1 ~ 1,TRUE ~start)) %>% 
         transmute(range = paste0(`#chr`,':',start,'-',end)) %>% 
         pull(range)
  
