@@ -32,18 +32,7 @@ GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'BETA')
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
 }
 
-GWAS_out <- GWAS_dat %>% 
-    dplyr::rename( 'effect_allele.outcome' = 'A1',
-                   'other_allele.outcome' = 'A2',
-                   'id.outcome' = 'outcome',
-                   'eaf.outcome' = 'FRQ',
-                    'se.outcome' = 'SE'
-                    ) %>% 
-    mutate(outcome = 'GWAS',
-           VARIANT_POSITION = paste0(CHR,'_',BP),
-           VARIANT_ID = paste(CHR,BP,effect_allele.outcome,other_allele.outcome,sep ='_')) %>% 
-    mutate(RSID = SNP,SNP = VARIANT_ID)
-GWAS_out
+GWAS_dat
 }
 
 
