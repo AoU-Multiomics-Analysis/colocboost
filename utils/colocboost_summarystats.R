@@ -5,6 +5,7 @@ library(colocboost)
 library(argparse)
 library(janitor)
 library(bedr)
+library(TwoSampleMR)
 source('/tmp/colocboost_utils.R')
 
 
