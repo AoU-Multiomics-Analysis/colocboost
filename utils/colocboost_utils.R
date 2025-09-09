@@ -86,6 +86,26 @@ tabix_res
 }
 
 
+clean_genotype_data_dosage <- function(tabix_output){
+variant_metadata <- tabix_output %>%
+        select(CHROM,POS,REF,ALT) %>%
+        mutate(ID = paste0(CHROM,"-",POS,'-',REF,'-',ALT)) %>% select(ID)
+genotype_matrix <- tabix_output %>%
+        mutate(ID = paste0(CHROM,"-",POS,'-',REF,'-',ALT)) %>% 
+        select(-CHROM,-POS,-ID,-REF,-ALT) %>%
+        mutate(across(everything(),~as.integer(.))) %>% 
+        zoo::na.aggregate(fun = mean)
+
+output_data <- bind_cols(variant_metadata,genotype_matrix) %>%
+        column_to_rownames('ID') %>%
+        t() %>%
+        data.frame() %>%
+        mutate(across(everything(),~scale(.,center = TRUE,scale = FALSE))) %>%
+        dplyr::rename_with(~str_replace_all(.,'\\.','-'))
+output_data
+}
+
+
 clean_genotype_data <- function(tabix_output){
 variant_metadata <- tabix_output %>%
         select(CHROM,POS,REF,ALT) %>%
