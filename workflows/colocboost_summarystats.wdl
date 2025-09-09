@@ -30,6 +30,7 @@ workflow colocboost_wdl {
     }
     output {
         File colocboost_res = colocboost.colocboost_res
+        File colocboost_summary = colocboost.colocboost_summary
     }
 }
 
@@ -66,6 +67,8 @@ workflow colocboost_wdl {
         
         output {
             File colocboost_res = "~{PhenotypeID}_colocboost_res.RDS"
+            File colocboost_summary = "~{PhenotypeID}_colocboost_summary.RDS"
+
         }
     }
 

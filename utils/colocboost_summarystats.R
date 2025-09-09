@@ -53,6 +53,9 @@ PhenotypeID <- args$PhenotypeID
 OutFile <- paste0(PhenotypeID, '_colocboost_res.RDS') 
 message(paste0('Writing results to ',OutFile))
 
+ColocBoostSummaryFile <- paste0(PhenotypeID, '_colocboost_summary.RDS')
+message(paste0('Writing summary file to ',ColocBoostSummaryFile))
+
 DosageFile <- args$GenotypeDosage
 
 SumstatsGWAS <- args$SumstatsGWAS
@@ -87,4 +90,8 @@ ColocboostResult<- colocboost(X = ColocboostObj$resid_genotype_matrix,
            )
 message('Saving colocboost results')
 saveRDS(ColocboostResult,file=OutFile)
+
+message('Saving colocboost summary')
+ColocboostSummary <- get_cos_summary(ColocboostResult)
+saveRDS(ColocboostSummary,file = ColocBoostSummaryFile)
 
