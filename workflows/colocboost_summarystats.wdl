@@ -1,3 +1,4 @@
+version 1.0
 
 task colocboost {
 
@@ -13,20 +14,20 @@ task colocboost {
     Int disk_space 
     Int num_threads
 
-    command{
+    command <<<
     Rscript /tmp/colocboost_summarystats.R \
-        --GenotypeDosage ${GenotypeDosage} \
-        --BedFile ${BedFile} \
-        --Covars ${Covars}  \
-        --SumstatsGWAS ${sep=" " SumstatsGWAS} \
-        --PhenotypeID ${PhenotypeID} 
-    }
+        --GenotypeDosage ~{GenotypeDosage} \
+        --BedFile ~{BedFile} \
+        --Covars ~{Covars}  \
+        --SumstatsGWAS ~{sep=" " SumstatsGWAS} \
+        --PhenotypeID ~{PhenotypeID} 
+    >>>
     runtime {
     docker: "ghcr.io/aou-multiomics-analysis/colocboost:main"
-    memory: "${memory}GB"
-    disks: "local-disk ${disk_space} HDD"
+    memory: "~{memory}GB"
+    disks: "local-disk ~{disk_space} HDD"
     bootDiskSizeGb: 25
-    preemptible: "${NumPrempt}"
+    preemptible: "~{NumPrempt}"
     cpu: num_threads
     }
     
