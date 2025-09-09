@@ -87,9 +87,11 @@ tabix_res
 
 
 clean_genotype_data_dosage <- function(tabix_output){
+message('Cleaning genotype dosage data')
 variant_metadata <- tabix_output %>%
         select(CHROM,POS,REF,ALT) %>%
         mutate(ID = paste0(CHROM,"-",POS,'-',REF,'-',ALT)) %>% select(ID)
+
 genotype_matrix <- tabix_output %>%
         mutate(ID = paste0(CHROM,"-",POS,'-',REF,'-',ALT)) %>% 
         select(-CHROM,-POS,-ID,-REF,-ALT) %>%
