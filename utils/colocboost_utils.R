@@ -1,4 +1,51 @@
 ### Preprocessing functions
+# helper function to load munged sumstats 
+# and format for MR 
+load_gwas_data <- function(GWAS_path){
+GWAS_dat <- fread(GWAS_path)
+GWAS_dat_cols <- colnames(GWAS_dat)
+
+message(paste0('GWAS columns: ',GWAS_dat_cols,'\n'))
+
+if (!'FRQ' %in% GWAS_dat_cols){
+message('Missing FRQ column in GWAS data\n Adding column in as NA')
+GWAS_dat$FRQ <- NA
+
+}
+
+
+
+if (!'SE' %in% GWAS_dat_cols & 'OR' %in% GWAS_dat_cols){
+message('SE measurement is missing, computing from OR and P value')
+GWAS_dat$SE <- get_se(GWAS_dat$OR,GWAS_dat$P)
+GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
+
+    
+} else if (!'SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
+messasge('SE measurement is missing, computing from BETA and P value')
+GWAS_dat$SE <- TwoSampleMR::get_eff(GWAS_dat$BETA,GWAS_dat$P)
+GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'BETA')
+
+} else if ('SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
+GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'BETA')
+}else if ('SE' %in% GWAS_dat_cols & 'OR' %in% GWAS_dat_cols){
+GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
+}
+
+GWAS_out <- GWAS_dat %>% 
+    dplyr::rename( 'effect_allele.outcome' = 'A1',
+                   'other_allele.outcome' = 'A2',
+                   'id.outcome' = 'outcome',
+                   'eaf.outcome' = 'FRQ',
+                    'se.outcome' = 'SE'
+                    ) %>% 
+    mutate(outcome = 'GWAS',
+           VARIANT_POSITION = paste0(CHR,'_',BP),
+           VARIANT_ID = paste(CHR,BP,effect_allele.outcome,other_allele.outcome,sep ='_')) %>% 
+    mutate(RSID = SNP,SNP = VARIANT_ID)
+GWAS_out
+}
+
 
 prep_covar_data <- function(QTL_covar_input){
 covar_df <- QTL_covar_input %>%
