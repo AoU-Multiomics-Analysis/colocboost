@@ -7,7 +7,7 @@ load_gwas_data <- function(GWAS_path,bed_range){
 
 GWAS_dat_cols <- strsplit(readLines(GWAS_path,n =1 ),split ='\t') %>% unlist()
 
-GWAS_dat <- tabix(bed_range,tabix_path)
+GWAS_dat <- tabix(bed_range,GWAS_path)
 colnames(tabix_res) <- GWAS_dat_cols
 
 
