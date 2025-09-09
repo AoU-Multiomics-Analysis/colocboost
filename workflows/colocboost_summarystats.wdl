@@ -29,7 +29,7 @@ workflow colocboost_wdl {
             num_threads = num_threads
     }
     output {
-        File colocboost_res = colocboost_res.colocboost_res
+        File colocboost_res = colocboost.colocboost_res
     }
 }
 
