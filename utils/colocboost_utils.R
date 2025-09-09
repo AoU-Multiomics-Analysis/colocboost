@@ -156,7 +156,7 @@ message(phenotype_id)
 message('Extracting genotype data')
 genotype_data  <- phenotype_bed %>%
     extract_genotype_vector(phenotype_id,VCF_path)
-genotype_matrix <- genotype_data %>% clean_genotype_data
+genotype_matrix <- genotype_data %>% clean_genotype_data_dosage
 #filtered_genotype_matrix <- genotype_matrix[ , colSums(is.na(genotype_matrix)) == 0]
 #filtered_genotype_matrix <- genotype_matrix[rowSums(is.na(genotype_matrix)) == 0 , ]
 
