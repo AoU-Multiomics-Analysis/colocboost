@@ -90,7 +90,8 @@ ColocboostResult<- colocboost(X = ColocboostObj$resid_genotype_matrix,
            Y = ColocboostObj$resid_phenotype_vec,
            LD = ColocboostObj$LD_matrix,
            sumstat = SumstatData,
-           focal_outcome_idx = 1
+           focal_outcome_idx = 1,
+           output_level = 2
            )
 message('Saving colocboost results')
 saveRDS(ColocboostResult,file=OutFile)
