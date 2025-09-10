@@ -64,7 +64,7 @@ message(paste0('Writing summary file to ',ColocBoostSummaryFile))
 DosageFile <- args$GenotypeDosage
 
 SumstatsGWAS <- args$SumstatsGWAS
-Partialize < args$Partialize
+Partialize <- args$Partialize
 
 ####### LOAD FILES ##########
 
