@@ -17,6 +17,8 @@ parser$add_argument("-BedFile", "--BedFile", required=TRUE, help="Path to bed fi
 parser$add_argument("-Covars", "--Covars", required=TRUE, help="Path to covars file")
 parser$add_argument("-PhenotypeID", "--PhenotypeID", required=TRUE, help="phenotype_id_string")
 parser$add_argument("-SumstatsGWAS", "--SumstatsGWAS", required=TRUE, nargs = "+")
+parser$add_argument("-Partialize", "--Partialize",type = 'logical' ,required=TRUE, choices =c(TRUE,FALSE))
+
 
 
 
@@ -62,6 +64,7 @@ message(paste0('Writing summary file to ',ColocBoostSummaryFile))
 DosageFile <- args$GenotypeDosage
 
 SumstatsGWAS <- args$SumstatsGWAS
+Partialize < args$Partialize
 
 ####### LOAD FILES ##########
 
@@ -84,8 +87,10 @@ message('Extracting QTL variants from GWAS')
 SumstatData <- ColocboostObj %>%
     extract_GWAS_data_list(.,ListGWAS)
 
-
 message('Colocboost begin')
+
+if (Partialize == TRUE) {
+message('Using partialized data')
 ColocboostResult<- colocboost(X = ColocboostObj$resid_genotype_matrix,
            Y = ColocboostObj$resid_phenotype_vec,
            LD = ColocboostObj$LD_matrix,
@@ -93,6 +98,17 @@ ColocboostResult<- colocboost(X = ColocboostObj$resid_genotype_matrix,
            focal_outcome_idx = 1,
            output_level = 2
            )
+} else if (Partialize == FALSE) {
+
+message('Not using partialized data')
+ColocboostResult<- colocboost(X = ColocboostObj$genotype_matrix,
+           Y = ColocboostObj$phenotype_vec,
+           LD = ColocboostObj$LD_matrix,
+           sumstat = SumstatData,
+           focal_outcome_idx = 1,
+           output_level = 2
+           )
+}
 message('Saving colocboost results')
 saveRDS(ColocboostResult,file=OutFile)
 

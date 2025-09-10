@@ -8,7 +8,7 @@ workflow colocboost_wdl {
         Array[File] SumstatsGWAS
         Array[File] SumstatsGWASIndex
         String PhenotypeID 
-        
+        Boolean Partialize        
         Int NumPrempt
         Int memory 
         Int disk_space 
@@ -28,7 +28,9 @@ workflow colocboost_wdl {
             NumPrempt = NumPrempt,
             memory = memory,
             disk_space = disk_space,
-            num_threads = num_threads
+            num_threads = num_threads,
+            Partialize  = Partialize 
+
     }
     output {
         File colocboost_res = colocboost.colocboost_res
@@ -45,7 +47,8 @@ workflow colocboost_wdl {
             Array[File] SumstatsGWAS
             Array[File] SumstatsGWASIndex
             String PhenotypeID 
-            
+            Boolean Partialize        
+      
             Int NumPrempt
             Int memory 
             Int disk_space 
@@ -57,7 +60,8 @@ workflow colocboost_wdl {
             --BedFile ~{BedFile} \
             --Covars ~{Covars}  \
             --SumstatsGWAS ~{sep=" " SumstatsGWAS} \
-            --PhenotypeID ~{PhenotypeID} 
+            --PhenotypeID ~{PhenotypeID} \
+            --Partialize ~{Partialize}
         >>>
         runtime {
             docker: "ghcr.io/aou-multiomics-analysis/colocboost:main"

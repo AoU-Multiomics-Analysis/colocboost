@@ -214,6 +214,8 @@ phenotype_vec <- phenotype_bed %>% extract_phenotype_vector(phenotype_id)
 residualized_phenotype_vec <- phenotype_vec %>%  residualize_molecular_phenotype_data(covars_df)
 variant_metadata <-  extract_variant_metadata(genotype_matrix)
 
+#partialized_data <- partialize_data()
+
 phenotype_range <- phenotype_bed %>% 
         filter(gene_id == phenotype_id) %>%
         dplyr::select(`#chr`,start,end) %>%
