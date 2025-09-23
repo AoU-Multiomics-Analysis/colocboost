@@ -63,8 +63,11 @@ message(paste0('Writing summary file to ',ColocBoostSummaryFile))
 
 DosageFile <- args$GenotypeDosage
 
+
 SumstatsGWAS <- args$SumstatsGWAS
+
 Partialize <- args$Partialize
+message(paste0('Partialization set to: ',Partialize))
 
 ####### LOAD FILES ##########
 
@@ -102,7 +105,7 @@ ColocboostResult<- colocboost(X = ColocboostObj$resid_genotype_matrix,
 
 message('Not using partialized data')
 ColocboostResult<- colocboost(X = ColocboostObj$genotype_matrix,
-           Y = ColocboostObj$phenotype_vec,
+           Y = ColocboostObj$resid_phenotype_vec,
            LD = ColocboostObj$LD_matrix,
            sumstat = SumstatData,
            focal_outcome_idx = 1,
