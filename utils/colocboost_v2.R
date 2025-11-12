@@ -1,6 +1,8 @@
 library(pecotmr)
 library(colocboost)
 library(optparse)
+library(tidyverse)
+library(data.table)
 
 ########### WRAPPER FUNCTIONS ##############
 # Takes in the phenotype table and paths to bedfile and covariates 
