@@ -56,7 +56,7 @@ extract_regional_data <- function(RegionalDataParameters,GenotypeFile) {
 
     region_data_individual <- load_multitask_regional_data(
         region = region,
-        genotype_list = genotype_list,
+        genotype_list = GenotypeFile,
         phenotype_list = phenotype_list,
         covariate_list = covariate_list,
         conditions_list_individual = conditions_list_individual,
