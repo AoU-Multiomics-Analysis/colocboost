@@ -37,6 +37,7 @@ extract_parameters <- function(phenotype_table ,CovarsDf,BedFileDf) {
     output
 }
 
+# wrapper function to run extract regional data 
 extract_regional_data <- function(RegionalDataParameters,GenotypeFile) {
     region_name_col <- 4
     keep_indel = TRUE
@@ -72,6 +73,39 @@ extract_regional_data <- function(RegionalDataParameters,GenotypeFile) {
         imiss_cutoff = imiss_cutoff
     )
     region_data_individual
+}
+
+# wraps all functions together into one 
+# function to run colocboost 
+wrap_colocboost <- function(PhenotypeData,
+                            CovarsDf,
+                            BedFileDf,
+                            GenotypeFile,
+                            SampleList) {
+    message('Extracting regional parameters')
+    Parameters <- PhenotypeData %>% 
+                           extract_parameters(CovarsDf,BedFileDf)
+
+    message('Extracting regional data')
+    RegionalData <- Parameters %>% 
+                            extract_regional_data(GenotypeFile)
+    maf_cutoff = 0
+    pip_cutoff_to_skip_ind = rep(0, length(Parameters$PhenotypeList))
+    qc_method = "rss_qc" 
+
+    message('Beginning Colocboost pipeline')
+    colocboost_results <- colocboost_analysis_pipeline(
+        RegionalData,
+        maf_cutoff = maf_cutoff, 
+        pip_cutoff_to_skip_ind = pip_cutoff_to_skip_ind,
+        qc_method = qc_method,
+        xqtl_coloc = TRUE,
+        joint_gwas = TRUE,
+        separate_gwas = TRUE,
+        overlap = FALSE,
+        check_null_max_ucos = 0.0015
+        )
+    colocboost_results
 }
 
 
@@ -118,7 +152,7 @@ ProteinMatrixPath <- opt$ProteinMatrix
 PhenotypePaths <- c(ExpressionMatrixPath,SplicingMatrixPath,ProteinMatrixPath)
 ModalitiesOrder <- c('Expression','Splicing','Protein')
 
-
+######### LOAD DATA ###########
 BedFileDf <- data.frame(BedPath=PhenotypePaths,Assay = ModalitiesOrder )
 CovarsDf <- data.frame(CovarsPath=CovarsPaths,Assay = ModalitiesOrder )
 
@@ -129,107 +163,25 @@ message(paste0('Number of samples included:', NumberSamples))
 
 GenotypeFile <- sub("\\.[^.]*$", "", opt$PlinkBedGenotypes)
 message(paste0('Using ',GenotypeFile,' as plink input'))
+########## RUN COLOCBOOST ############
 
-message('Extracting regional parameters')
-Parameters <- PhenotypeTable %>% 
-                       extract_parameters(CovarsDf,BedFileDf)
-
-message('Extracting regional data')
-RegionalData <- Parameters %>% 
-                        extract_regional_data(GenotypeFile)
-
-maf_cutoff = 0
-pip_cutoff_to_skip_ind = rep(0, length(Parameters$PhenotypeList))
-qc_method = "rss_qc" 
-
-
-colocboost_results <- colocboost_analysis_pipeline(
-    RegionalData,
-    maf_cutoff = maf_cutoff, 
-    pip_cutoff_to_skip_ind = pip_cutoff_to_skip_ind,
-    qc_method = qc_method,
-    xqtl_coloc = TRUE,
-    joint_gwas = TRUE,
-    separate_gwas = TRUE,
-    overlap = FALSE,
-    #check_null = .001,
-    check_null_max_ucos = 0.0015
-)
+colocboost_result <- PhenotypeTable %>% 
+                    wrap_colocboost(CovarsDf,
+                                    BedFileDf,
+                                    GenotypeFile,
+                                    SampleList
+                                    )
+#colocboost_result <- pmap(
+                        #PhenotypeTable,
+                        #wrap_colocboost,
+                        #CovarsDf = CovarsDf,
+                        #BedFileDf = BedFileDf,
+                        #GenotypeFile = GenotypeFile,
+                        #SampleList = SampleList
+                        #)
 
 saveRDS(colocboost_results,'test.rds')
 
 
-
-
-############ SET PATHS ######################
-#covariate_list <- c('/home/jupyter/RNA_proteome_colocboost/covars/EUR_QTL_covariates.tsv',
-		 #'/home/jupyter/RNA_proteome_colocboost/covars/EUR_splicing_QTL_covariates.tsv'
-		 #)
-
-#phenotype_list <- c('/home/jupyter/RNA_proteome_colocboost/phenotype/EUR.expression.bed.gz',
-			#'/home/jupyter/RNA_proteome_colocboost/phenotype/EUR.splicing.bed.gz'
-		   #)
-#region <- 'chr1:206645688-208645689'
-#association_window <- region
-#extract_region_name <- list(c('ENSG00000307252.1'),
-				#c('chr1:207646968:207647317:clu_4655_+:ENSG00000307252.1')
-			   #)
-#conditions_list_individual <- c('Expression','Splicing')
-#match_geno_pheno <- c(1,1)
-
-#genotype_list <- '/home/jupyter/RNA_proteome_colocboost/genotype/expression/EUR'
-#region_name_col <- 4
-#keep_indel = TRUE
-
-#maf_cutoff = 0
-#mac_cutoff = 0 
-#xvar_cutoff = 0
-#imiss_cutoff = 1
-
-####### EXTRACT REGIONAL DATA ###############
-
-
-# More advanced parameters see pecotmr::load_multitask_regional_data()
-#region_data_individual <- load_multitask_regional_data(
-    #region = region,
-    #genotype_list = genotype_list,
-    #phenotype_list = phenotype_list,
-    #covariate_list = covariate_list,
-    #conditions_list_individual = conditions_list_individual,
-    #match_geno_pheno = match_geno_pheno,
-    #association_window = association_window,
-    #region_name_col = region_name_col,
-    #extract_region_name = extract_region_name,
-    #keep_indel = keep_indel,
-    #keep_samples = SampleList,
-    #maf_cutoff = maf_cutoff,
-    #mac_cutoff = mac_cutoff,
-    #xvar_cutoff = xvar_cutoff,
-    #imiss_cutoff = imiss_cutoff
-#)
-#saveRDS(region_data_individual,'test_region_data.rds')
-#region_data_individual <- readRDS('test_region_data.rds')
-
-#maf_cutoff = 0
-#pip_cutoff_to_skip_ind = rep(0, length(phenotype_list))
-#qc_method = "rss_qc" 
-
-
-#colocboost_results <- colocboost_analysis_pipeline(
-    #region_data_individual,
-    #maf_cutoff = maf_cutoff, 
-    #pip_cutoff_to_skip_ind = pip_cutoff_to_skip_ind,
-    #qc_method = qc_method,
-    #xqtl_coloc = TRUE,
-    #joint_gwas = TRUE,
-    #separate_gwas = TRUE,
-    #min_cluster_corr = 0.95,
-    #overlap = FALSE,
-    ##check_null = .001,
-    #check_null_max_ucos = 0.0015
-#)
-
-#summary <- get_colocboost_summary(colocboost_results):w
-#saveRDS(colocboost_results,'test.rds')
 
 
