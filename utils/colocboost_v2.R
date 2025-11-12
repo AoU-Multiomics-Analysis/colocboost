@@ -130,11 +130,15 @@ option_list <- list(
   optparse::make_option(c("--PlinkBedGenotypes"), type="character", default=NULL,
     help="path to plink genotypes", metavar="type"),
   optparse::make_option(c("--SampleList"), type="character", default=NULL,
-    help="path to list of samples to use", metavar="type")
+    help="path to list of samples to use", metavar="type"),
+  optparse::make_option(c("--OutputPrefix"), type="character", default=NULL,
+    help="Output prefix to be used in out filename", metavar="type")
+
   )
 opt <- optparse::parse_args(optparse::OptionParser(option_list=option_list))
+OutputPrefix <- opt$OutputPrefix
 
-
+OutFileName <- paste0(OutputPrefix,'_colocboost_res.rds')
 
 ###### PARSE COMMAND LINE ARGUMENTS ##########
 
@@ -165,23 +169,9 @@ GenotypeFile <- sub("\\.[^.]*$", "", opt$PlinkBedGenotypes)
 message(paste0('Using ',GenotypeFile,' as plink input'))
 ########## RUN COLOCBOOST ############
 
-colocboost_result <- PhenotypeTable %>% 
-                    wrap_colocboost(CovarsDf,
-                                    BedFileDf,
-                                    GenotypeFile,
-                                    SampleList
-                                    )
-#colocboost_result <- pmap(
-                        #PhenotypeTable,
-                        #wrap_colocboost,
-                        #CovarsDf = CovarsDf,
-                        #BedFileDf = BedFileDf,
-                        #GenotypeFile = GenotypeFile,
-                        #SampleList = SampleList
-                        #)
-
-saveRDS(colocboost_results,'test.rds')
+PhenotypeList <- split(PhenotypeTable, seq_len(nrow(PhenotypeTable)))
+colocboost_results <- map(PhenotypeList, ~ wrap_colocboost(.x, CovarsDf, BedFileDf, GenotypeFile, SampleList))
 
 
-
-
+message('Writing colocboost results')
+saveRDS(colocboost_results,OutFileName)
