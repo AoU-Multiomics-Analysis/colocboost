@@ -6,3 +6,6 @@ workflows:
   - subclass: WDL 
     primaryDescriptorPath: /workflows/colocboost_summarystats.wdl
     name: colocboost_summarystats
+  - subclass: WDL 
+    primaryDescriptorPath: /workflows/colocboost_individual_level.wdl
+    name: colocboost_individual_level 
