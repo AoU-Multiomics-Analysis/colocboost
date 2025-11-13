@@ -9,6 +9,7 @@ RUN micromamba -y -n base install  \
     conda-forge::r-base \ 
     conda-forge::r-tidyverse \
     dnachun::r-colocboost \
+    dnachun::r-pecotmr \
     conda-forge::r-data.table \
     conda-forge::r-bedr \
     bioconda::bedtools \
