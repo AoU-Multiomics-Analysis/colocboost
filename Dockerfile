@@ -1,31 +1,23 @@
-FROM mambaorg/micromamba:1.5.3
-## Set up environment
-ENV MAMBA_DOCKERFILE_ACTIVATE=1
-ENV PATH=/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-USER root
+FROM ghcr.io/prefix-dev/pixi:latest
+
+RUN pixi global install -c dnachun -c conda-forge -c bioconda r-base=4.4 bedtools htslib wget findutils
 
 
-RUN micromamba -y -n base install  \
-    conda-forge::r-base \ 
-    conda-forge::r-tidyverse \
-    dnachun::r-colocboost \
-    dnachun::r-pecotmr \
-    conda-forge::r-data.table \
-    conda-forge::r-bedr \
-    bioconda::bedtools \
-    conda-forge::r-argparse \
-    conda-forge::r-janitor \
-    bioconda::htslib \ 
-    conda-forge::r-zoo \
-    dnachun::r-twosamplemr 
+RUN pixi global install --environment r-base \
+    r-argparse \
+    r-argparser \
+    r-bedr \
+    r-colocboost \
+    r-data.table \
+    r-enrichr \
+    r-gprofiler2 \
+    r-janitor \
+    r-optparse \
+    r-pecotmr \
+    r-tidyverse \
+    r-susier
 
-
-#RUN apt-get install -y wget
+RUN find ${HOME}/.pixi/envs/r-base/bin -name '*bioconductor-*-post-link.sh' | \
+   xargs -I % bash -c "PREFIX=${HOME}/.pixi/envs/r-base PATH=${HOME}/.pixi/envs/r-base/bin:${PATH} % || true"
 
 COPY utils/* . 
-
-RUN mkdir -p /src
-
-WORKDIR /src
-
-
