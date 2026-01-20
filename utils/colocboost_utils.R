@@ -139,14 +139,19 @@ variant_metadata <- tabix_output %>%
 genotype_matrix <- tabix_output %>%
         mutate(ID = paste0(CHROM,"-",POS,'-',REF,'-',ALT)) %>% 
         select(-CHROM,-POS,-ID,-REF,-ALT) %>%
-        mutate(across(everything(),~as.integer(.))) %>% 
-        zoo::na.aggregate(fun = mean)
+        mutate(across(everything(),~as.integer(.)))
 
 output_data <- bind_cols(variant_metadata,genotype_matrix) %>%
         column_to_rownames('ID') %>%
         t() %>%
         data.frame() %>%
-        mutate(across(everything(),~scale(.,center = TRUE,scale = FALSE))) %>%
+        mutate(across(everything(),~{
+          # Center first (without scaling)
+          centered <- scale(., center = TRUE, scale = FALSE)
+          # Then impute missing values with the mean (which is 0 after centering)
+          centered[is.na(centered)] <- 0
+          centered
+        })) %>%
         dplyr::rename_with(~str_replace_all(.,'\\.','-'))
 output_data
 }
