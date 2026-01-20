@@ -146,9 +146,9 @@ output_data <- bind_cols(variant_metadata,genotype_matrix) %>%
         t() %>%
         data.frame() %>%
         mutate(across(everything(),~{
-          # Center first (without scaling)
+          # Center dosage data (without scaling to preserve dosage scale)
           centered <- scale(., center = TRUE, scale = FALSE)
-          # Then impute missing values with the mean (which is 0 after centering)
+          # Then impute missing values with 0 (the mean after centering)
           centered[is.na(centered)] <- 0
           centered
         })) %>%
@@ -172,9 +172,9 @@ output_data <- bind_cols(variant_metadata,genotype_matrix) %>%
         t() %>%
         data.frame() %>%
         mutate(across(everything(),~{
-          # Scale and center first
+          # Scale and center (standardize to mean=0, sd=1)
           scaled <- scale(.)
-          # Then impute missing values with the mean (which is 0 after centering)
+          # Impute missing values with 0 (the standardized mean)
           scaled[is.na(scaled)] <- 0
           scaled
         })) %>%
