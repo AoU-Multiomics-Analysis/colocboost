@@ -160,14 +160,19 @@ genotype_matrix <- tabix_output %>%
         select(-CHROM,-POS,-ID,-REF,-ALT,-QUAL,-FILTER,-INFO,-FORMAT) %>%
         mutate(across(everything(),~str_remove(.,':.*')))  %>%
         mutate(across(everything(),~case_when(. == '0/0' ~ 0, . == '1/0' ~1,. == '0/1' ~1,. == '1/1' ~ 2,
-                                              . == '0|0' ~ 0, . == '1|0' ~1,. == '0|1' ~1,. == '1|1' ~ 2))) %>% 
-        zoo::na.aggregate()
+                                              . == '0|0' ~ 0, . == '1|0' ~1,. == '0|1' ~1,. == '1|1' ~ 2)))
 
 output_data <- bind_cols(variant_metadata,genotype_matrix) %>%
         column_to_rownames('ID') %>%
         t() %>%
         data.frame() %>%
-        mutate(across(everything(),~scale(.))) %>%
+        mutate(across(everything(),~{
+          # Scale and center first
+          scaled <- scale(.)
+          # Then impute missing values with the mean (which is 0 after centering)
+          scaled[is.na(scaled)] <- 0
+          scaled
+        })) %>%
         dplyr::rename_with(~str_replace_all(.,'\\.','-'))
 output_data
 }
